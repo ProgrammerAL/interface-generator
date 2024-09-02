@@ -94,6 +94,10 @@ public class InterfaceGenerator : IIncrementalGenerator
             {
                 continue;
             }
+            else if (methodSymbol.CallingConvention)
+            { 
+                continue;
+            }
 
             string? methodName = methodSymbol.Name;
             string returnType;

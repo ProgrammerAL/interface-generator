@@ -3,7 +3,8 @@
 namespace Samples;
 
 [SimpleInterface]
-public partial class MyClass
+public class MyClass : IMyClass
 {
-    public string GenerateString() => "";
+    public string GenerateString() => GenerateString_Private();
+    private string GenerateString_Private() => "";
 }

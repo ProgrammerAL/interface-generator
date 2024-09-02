@@ -34,10 +34,10 @@ namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.Extensio
         //TODO: Include other items too
         builder.AppendLine("}");
 
-        //Output the partial class that inherits from the generated interface
-        builder.AppendLine($"public partial class {interfaceToGenerate.ClassName} : {interfaceToGenerate.InterfaceName}");
-        builder.AppendLine("{");
-        builder.AppendLine("}");
+        ////Output the partial class that inherits from the generated interface
+        //builder.AppendLine($"public partial class {interfaceToGenerate.ClassName} : {interfaceToGenerate.InterfaceName}");
+        //builder.AppendLine("{");
+        //builder.AppendLine("}");
 
         return builder.ToString();
     }
