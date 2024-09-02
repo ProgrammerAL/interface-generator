@@ -9,77 +9,66 @@ namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.Generato
 
 public static class MethodParser
 {
-    public static ImmutableArray<SimpleInterfaceToGenerate.Method> ExtractMethods(INamedTypeSymbol symbol)
+    public static SimpleInterfaceToGenerate.Method? ExtractMethod(IMethodSymbol symbol)
     {
-        var methodsBuilder = ImmutableArray.CreateBuilder<SimpleInterfaceToGenerate.Method>();
-        var classMembers = symbol.GetMembers();
-
-        foreach (var member in classMembers)
+        if (!IsSymbolValid(symbol))
         {
-            if (!TryGetValidMethodSymbol(member, out var methodSymbol))
-            {
-                continue;
-            }
-
-            string? methodName = methodSymbol!.Name;
-            string returnType;
-            if (methodSymbol.ReturnsVoid)
-            {
-                returnType = "void";
-            }
-            else
-            {
-                returnType = methodSymbol.ReturnType.ToString();
-            }
-
-            var argumentBuilder = ImmutableArray.CreateBuilder<SimpleInterfaceToGenerate.Argument>();
-
-            //_ = System.Diagnostics.Debugger.Launch();
-
-            foreach (var methodParameter in methodSymbol.Parameters)
-            {
-                var argName = methodParameter.Name;
-                var dataType = methodParameter.Type.ToDisplayString();
-                var nullableAnnotation = methodParameter.NullableAnnotation;
-
-                var interfaceArgument = new SimpleInterfaceToGenerate.Argument(argName, dataType, nullableAnnotation);
-                argumentBuilder.Add(interfaceArgument);
-            }
-
-            var interfaceMethod = new SimpleInterfaceToGenerate.Method(methodName, returnType, argumentBuilder.ToImmutableArray());
-
-            methodsBuilder.Add(interfaceMethod);
+            return null;
         }
 
-        return methodsBuilder.ToImmutable();
+        string? methodName = symbol!.Name;
+        string returnType;
+        if (symbol.ReturnsVoid)
+        {
+            returnType = "void";
+        }
+        else
+        {
+            returnType = symbol.ReturnType.ToString();
+        }
+
+        var argumentBuilder = ImmutableArray.CreateBuilder<SimpleInterfaceToGenerate.Argument>();
+
+        //_ = System.Diagnostics.Debugger.Launch();
+
+        foreach (var methodParameter in symbol.Parameters)
+        {
+            var argName = methodParameter.Name;
+            var dataType = methodParameter.Type.ToDisplayString();
+            var nullableAnnotation = methodParameter.NullableAnnotation;
+
+            var interfaceArgument = new SimpleInterfaceToGenerate.Argument(argName, dataType, nullableAnnotation);
+            argumentBuilder.Add(interfaceArgument);
+        }
+
+        return new SimpleInterfaceToGenerate.Method(methodName, returnType, argumentBuilder.ToImmutableArray());
     }
 
-    private static bool TryGetValidMethodSymbol(ISymbol? symbol, out IMethodSymbol? outMethodSymbol)
+    private static bool IsSymbolValid(IMethodSymbol symbol)
     {
-        outMethodSymbol = null;
-
-        if (symbol is not IMethodSymbol methodSymbol)
-        {
-            //Only looking at methods right now
-            return false;
-        }
-        else if (string.Equals(".ctor", methodSymbol.Name, StringComparison.Ordinal))
+        if (string.Equals(".ctor", symbol.Name, StringComparison.Ordinal))
         {
             //Don't make a method for the constructor
             return false;
         }
-        else if (methodSymbol.IsStatic)
+        else if (symbol.IsStatic)
         {
             //Only instance methods
             return false;
         }
-        else if (methodSymbol.DeclaredAccessibility != Accessibility.Public)
+        else if (symbol.DeclaredAccessibility != Accessibility.Public)
         {
             //Only public methods
             return false;
         }
+        else if (symbol.Name.StartsWith("get_")
+            || symbol.Name.StartsWith("set_"))
+        {
+            //These are the methods for properties
+            //  Don't include those here because properties are handled separately
+            return false;
+        }
 
-        outMethodSymbol = methodSymbol;
         return true;
     }
 }

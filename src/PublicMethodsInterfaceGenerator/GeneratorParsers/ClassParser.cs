@@ -58,12 +58,35 @@ public static class ClassParser
         var interfaceName = customInterfaceName ?? $"I{symbol.Name}";
         var nameSpace = namespaceName ?? (symbol.ContainingNamespace.IsGlobalNamespace ? string.Empty : symbol.ContainingNamespace.ToString());
 
-        var methods = MethodParser.ExtractMethods(symbol);
+        var methodsBuilder = ImmutableArray.CreateBuilder<SimpleInterfaceToGenerate.Method>();
+        var propertiesBuilder = ImmutableArray.CreateBuilder<SimpleInterfaceToGenerate.Property>();
+
+        var members = symbol.GetMembers();
+        foreach (var member in members)
+        {
+            if (member is IMethodSymbol memberSymbol)
+            {
+                var method = MethodParser.ExtractMethod(memberSymbol);
+                if (method is object)
+                {
+                    methodsBuilder.Add(method);
+                }
+            }
+            else if (member is IPropertySymbol propertySymbol)
+            {
+                var property = PropertyParser.ExtractProperty(propertySymbol);
+                if (property is object)
+                {
+                    propertiesBuilder.Add(property);
+                }
+            }
+        }
 
         return new SimpleInterfaceToGenerate(
             InterfaceName: interfaceName,
             ClassName: symbol.Name,
             FullNamespace: nameSpace,
-            Methods: methods);
+            Methods: methodsBuilder.ToImmutableArray(),
+            Properties: propertiesBuilder.ToImmutableArray());
     }
 }

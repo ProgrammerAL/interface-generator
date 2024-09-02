@@ -16,7 +16,9 @@ public record SimpleInterfaceToGenerate(
     string InterfaceName, 
     string ClassName, 
     string FullNamespace, 
-    ImmutableArray<Method> Methods)
+    ImmutableArray<Method> Methods,
+    ImmutableArray<Property> Properties
+    )
 {
     public record Method(string MethodName, string ReturnType, ImmutableArray<Argument> Arguments)
     { 
@@ -29,5 +31,11 @@ public record SimpleInterfaceToGenerate(
         {
             return $"{DataType} {ArgumentName}";
         }
+    }
+
+    public record Property(string MethodName, string ReturnType, bool HasValidGet, bool HasValidSet)
+    { 
+        public string ToPropertyString() 
+            => $"{ReturnType} {MethodName} {{ {(HasValidGet ? "get; " : "")}{(HasValidSet ? "set; " : "")}}}";
     }
 }
