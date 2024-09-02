@@ -10,7 +10,7 @@ public class InterfacesDemo
 {
     public void DisplayMyClass()
     {
-        Console.WriteLine(nameof(IMyClass));
-        Console.WriteLine(nameof(IMyClass.GenerateString));
+        Console.WriteLine(nameof(IMyClass1));
+        Console.WriteLine(nameof(IMyClass1.GenerateString));
     }
 }

@@ -6,16 +6,21 @@ namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator;
 
 public static class SourceGenerationHelper
 {
+    public const string GenerateSimpleInterfaceAttributeName = "GenerateSimpleInterfaceAttribute";
+    public const string GenerateSimpleInterfaceAttributeFullName = $"ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.Extensions.{GenerateSimpleInterfaceAttributeName}";
+
     public const string AttributeProperty_InterfaceName = "InterfaceName";
+    public const string AttributeProperty_NamespaceName = "Namespace";
 
     public const string AttributeClassCode =
 @$"
 namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.Extensions
 {{
     [System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public class SimpleInterfaceAttribute : Attribute
+    public class {GenerateSimpleInterfaceAttributeName} : System.Attribute
     {{
         public string? {AttributeProperty_InterfaceName} {{ get; set; }}
+        public string? {AttributeProperty_NamespaceName} {{ get; set; }}
     }}
 }}
 ";
@@ -23,21 +28,17 @@ namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.Extensio
     public static string GenerateInterface(in SimpleInterfaceToGenerate interfaceToGenerate)
     {
         var builder = new StringBuilder();
-        builder.AppendLine($"namespace {interfaceToGenerate.FullNamespace};");
-        builder.AppendLine();
-        builder.AppendLine($"public interface {interfaceToGenerate.InterfaceName }");
-        builder.AppendLine("{");
+        _ = builder.AppendLine($"namespace {interfaceToGenerate.FullNamespace};");
+        _ = builder.AppendLine();
+        _ = builder.AppendLine($"public interface {interfaceToGenerate.InterfaceName}");
+        _ = builder.AppendLine("{");
         foreach (var method in interfaceToGenerate.Methods)
         {
-            builder.AppendLine($"    {method.ToMethodString()}");
+            _ = builder.AppendLine($"    {method.ToMethodString()}");
         }
-        //TODO: Include other items too
-        builder.AppendLine("}");
 
-        ////Output the partial class that inherits from the generated interface
-        //builder.AppendLine($"public partial class {interfaceToGenerate.ClassName} : {interfaceToGenerate.InterfaceName}");
-        //builder.AppendLine("{");
-        //builder.AppendLine("}");
+        //TODO: Include other items too
+        _ = builder.AppendLine("}");
 
         return builder.ToString();
     }

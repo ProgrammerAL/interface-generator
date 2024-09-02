@@ -24,7 +24,10 @@ public record SimpleInterfaceToGenerate(
     }
 
     public record Argument(string ArgumentName, string DataType, NullableAnnotation NullableAnnotation)
-    { 
-        public string ToArgumentString() => $"{DataType} {ArgumentName}";
+    {
+        public string ToArgumentString()
+        {
+            return $"{DataType} {ArgumentName}";
+        }
     }
 }
