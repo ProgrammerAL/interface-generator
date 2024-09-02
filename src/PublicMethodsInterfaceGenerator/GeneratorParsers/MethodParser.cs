@@ -68,6 +68,13 @@ public static class MethodParser
             //  Don't include those here because properties are handled separately
             return false;
         }
+        else if (symbol.Name.StartsWith("add_")
+            || symbol.Name.StartsWith("remove_"))
+        {
+            //These are the methods for events
+            //  Don't include those here because events are handled separately
+            return false;
+        }
 
         return true;
     }

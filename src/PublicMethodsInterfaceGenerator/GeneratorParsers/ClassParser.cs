@@ -53,13 +53,12 @@ public static class ClassParser
 
     private static SimpleInterfaceToGenerate? TryExtractSymbols(INamedTypeSymbol symbol, string? customInterfaceName, string? namespaceName)
     {
-        //System.Diagnostics.Debugger.Launch();
-
         var interfaceName = customInterfaceName ?? $"I{symbol.Name}";
         var nameSpace = namespaceName ?? (symbol.ContainingNamespace.IsGlobalNamespace ? string.Empty : symbol.ContainingNamespace.ToString());
 
         var methodsBuilder = ImmutableArray.CreateBuilder<SimpleInterfaceToGenerate.Method>();
         var propertiesBuilder = ImmutableArray.CreateBuilder<SimpleInterfaceToGenerate.Property>();
+        var eventsBuilder = ImmutableArray.CreateBuilder<SimpleInterfaceToGenerate.Event>();
 
         var members = symbol.GetMembers();
         foreach (var member in members)
@@ -80,6 +79,14 @@ public static class ClassParser
                     propertiesBuilder.Add(property);
                 }
             }
+            else if (member is IEventSymbol eventSymbol)
+            {
+                var parsedEvent = EventParser.ExtractEvent(eventSymbol);
+                if (parsedEvent is object)
+                {
+                    eventsBuilder.Add(parsedEvent);
+                }
+            }
         }
 
         return new SimpleInterfaceToGenerate(
@@ -87,6 +94,7 @@ public static class ClassParser
             ClassName: symbol.Name,
             FullNamespace: nameSpace,
             Methods: methodsBuilder.ToImmutableArray(),
-            Properties: propertiesBuilder.ToImmutableArray());
+            Properties: propertiesBuilder.ToImmutableArray(),
+            Events: eventsBuilder.ToImmutableArray());
     }
 }

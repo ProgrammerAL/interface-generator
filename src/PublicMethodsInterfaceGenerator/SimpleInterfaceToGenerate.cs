@@ -17,25 +17,32 @@ public record SimpleInterfaceToGenerate(
     string ClassName, 
     string FullNamespace, 
     ImmutableArray<Method> Methods,
-    ImmutableArray<Property> Properties
+    ImmutableArray<Property> Properties,
+    ImmutableArray<Event> Events
     )
 {
-    public record Method(string MethodName, string ReturnType, ImmutableArray<Argument> Arguments)
+    public record Method(string Name, string ReturnType, ImmutableArray<Argument> Arguments)
     { 
-        public string ToMethodString() => $"{ReturnType} {MethodName}({string.Join(", ", Arguments.Select(a => a.ToArgumentString()))});";
+        public string ToMethodString() => $"{ReturnType} {Name}({string.Join(", ", Arguments.Select(a => a.ToArgumentString()))});";
     }
 
-    public record Argument(string ArgumentName, string DataType, NullableAnnotation NullableAnnotation)
+    public record Argument(string Name, string DataType, NullableAnnotation NullableAnnotation)
     {
         public string ToArgumentString()
         {
-            return $"{DataType} {ArgumentName}";
+            return $"{DataType} {Name}";
         }
     }
 
-    public record Property(string MethodName, string ReturnType, bool HasValidGet, bool HasValidSet)
+    public record Property(string Name, string ReturnType, bool HasValidGet, bool HasValidSet)
     { 
         public string ToPropertyString() 
-            => $"{ReturnType} {MethodName} {{ {(HasValidGet ? "get; " : "")}{(HasValidSet ? "set; " : "")}}}";
+            => $"{ReturnType} {Name} {{ {(HasValidGet ? "get; " : "")}{(HasValidSet ? "set; " : "")}}}";
+    }
+
+    public record Event(string Name, string EventDataType)
+    {
+        public string ToEventString()
+            => $"event {EventDataType} {Name};";
     }
 }

@@ -32,6 +32,11 @@ namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.Extensio
         _ = builder.AppendLine();
         _ = builder.AppendLine($"public interface {interfaceToGenerate.InterfaceName}");
         _ = builder.AppendLine("{");
+        foreach (var outputEvent in interfaceToGenerate.Events)
+        {
+            _ = builder.AppendLine($"    {outputEvent.ToEventString()}");
+        }
+
         foreach (var property in interfaceToGenerate.Properties)
         {
             _ = builder.AppendLine($"    {property.ToPropertyString()}");
