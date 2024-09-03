@@ -2,25 +2,41 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator;
+namespace ProgrammerAl.SourceGenerators.InterfaceGenerator;
 
 public static class SourceGenerationHelper
 {
-    public const string GenerateSimpleInterfaceAttributeName = "GenerateSimpleInterfaceAttribute";
-    public const string GenerateSimpleInterfaceAttributeFullName = $"ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.Extensions.{GenerateSimpleInterfaceAttributeName}";
+    public const string GenerateInterfaceAttributeName = "GenerateInterfaceAttribute";
+    public const string GenerateInterfaceAttributeNameSpace = "ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes";
+    public const string GenerateInterfaceAttributeFullName = $"{GenerateInterfaceAttributeNameSpace}.{GenerateInterfaceAttributeName}";
+
+    public const string ExcludeFromGeneratedInterfaceAttributeName = "ExcludeFromGeneratedInterfaceAttribute";
+
 
     public const string AttributeProperty_InterfaceName = "InterfaceName";
     public const string AttributeProperty_NamespaceName = "Namespace";
 
     public const string AttributeClassCode =
 @$"
-namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.Extensions
+namespace {GenerateInterfaceAttributeNameSpace}
 {{
     [System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public class {GenerateSimpleInterfaceAttributeName} : System.Attribute
+    public class {GenerateInterfaceAttributeName} : System.Attribute
     {{
+        /// <summary>
+        /// Set this to override the default interface name. Or leave it null to use the class name with an 'I' prepended to it.
+        /// </summary>
         public string? {AttributeProperty_InterfaceName} {{ get; set; }}
+
+        /// <summary>
+        /// Set this to override the namespace to generate the interface in. By default, it will be the same as the class.
+        /// </summary>
         public string? {AttributeProperty_NamespaceName} {{ get; set; }}
+    }}
+
+    [System.AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event, Inherited = false, AllowMultiple = false)]
+    public class {ExcludeFromGeneratedInterfaceAttributeName} : System.Attribute
+    {{
     }}
 }}
 ";
@@ -47,7 +63,6 @@ namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.Extensio
             _ = builder.AppendLine($"    {method.ToMethodString()}");
         }
 
-        //TODO: Include other items too
         _ = builder.AppendLine("}");
 
         return builder.ToString();

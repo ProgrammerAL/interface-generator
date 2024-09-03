@@ -5,7 +5,7 @@ using System.Text;
 
 using Microsoft.CodeAnalysis;
 
-namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.GeneratorParsers;
+namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.GeneratorParsers;
 
 public static class ClassParser
 {
@@ -27,8 +27,8 @@ public static class ClassParser
         {
             var attributeClassName = attributeData.AttributeClass?.Name;
             if (string.IsNullOrWhiteSpace(attributeClassName)
-                || attributeClassName != SourceGenerationHelper.GenerateSimpleInterfaceAttributeName
-                || attributeData.AttributeClass!.ToDisplayString() != SourceGenerationHelper.GenerateSimpleInterfaceAttributeFullName)
+                || attributeClassName != SourceGenerationHelper.GenerateInterfaceAttributeName
+                || attributeData.AttributeClass!.ToDisplayString() != SourceGenerationHelper.GenerateInterfaceAttributeFullName)
             {
                 continue;
             }

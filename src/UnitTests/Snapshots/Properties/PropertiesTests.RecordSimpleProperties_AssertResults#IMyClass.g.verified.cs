@@ -1,0 +1,22 @@
+﻿//HintName: IMyClass.g.cs
+namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+
+public interface IMyClass
+{
+    string? FirstName { get; set; }
+    string? MiddleName { get; set; }
+    string LastName { get; set; }
+    string Tag1 { get; }
+    string Tag2 { set; }
+    int Arg1 { get; set; }
+    double Arg2 { get; set; }
+    float Arg3 { get; set; }
+    decimal Arg4 { get; set; }
+    char Arg5 { get; set; }
+    string ToString();
+    int GetHashCode();
+    bool Equals(object? obj);
+    bool Equals(IMyClass? other);
+    bool Equals(ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses.MyClass? other);
+    ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses.MyClass <Clone>$();
+}

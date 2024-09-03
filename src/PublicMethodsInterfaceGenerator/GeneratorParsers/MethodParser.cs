@@ -5,7 +5,7 @@ using System.Text;
 
 using Microsoft.CodeAnalysis;
 
-namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.GeneratorParsers;
+namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.GeneratorParsers;
 
 public static class MethodParser
 {
@@ -28,8 +28,6 @@ public static class MethodParser
         }
 
         var argumentBuilder = ImmutableArray.CreateBuilder<SimpleInterfaceToGenerate.Argument>();
-
-        //_ = System.Diagnostics.Debugger.Launch();
 
         foreach (var methodParameter in symbol.Parameters)
         {
@@ -73,6 +71,11 @@ public static class MethodParser
         {
             //These are the methods for events
             //  Don't include those here because events are handled separately
+            return false;
+        }
+        else if (symbol.GetAttributes().Any(x => x.AttributeClass?.Name is SourceGenerationHelper.ExcludeFromGeneratedInterfaceAttributeName))
+        {
+            //Don't include methods that have the [IgnoreInGeneratedInterface] attribute
             return false;
         }
 

@@ -1,8 +1,8 @@
-﻿using ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.Extensions;
+﻿using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
 
 namespace Samples;
 
-[GenerateSimpleInterface]
+[GenerateInterface]
 public class MyClass4 : IMyClass4
 {
     public string? FirstName { get; set; }

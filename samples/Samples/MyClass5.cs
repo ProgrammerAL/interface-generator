@@ -1,4 +1,4 @@
-﻿using ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.Extensions;
+﻿using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
 
 using Samples.NonDemoClasses;
 
@@ -6,7 +6,7 @@ namespace Samples;
 
 public delegate void MyEventDelegate(object sender, EventArgs e);
 
-[GenerateSimpleInterface]
+[GenerateInterface]
 public class MyClass5 : IMyClass5
 {
     public event EventHandler? MyEvent;

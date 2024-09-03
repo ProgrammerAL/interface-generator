@@ -5,7 +5,7 @@ using System.Text;
 
 using Microsoft.CodeAnalysis;
 
-namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.GeneratorParsers;
+namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.GeneratorParsers;
 
 public static class PropertyParser
 {
@@ -41,6 +41,11 @@ public static class PropertyParser
         else if (symbol.DeclaredAccessibility != Accessibility.Public)
         {
             //Only public properties
+            return false;
+        }
+        else if (symbol.GetAttributes().Any(x => x.AttributeClass?.Name is SourceGenerationHelper.ExcludeFromGeneratedInterfaceAttributeName))
+        {
+            //Don't include methods that have the [IgnoreInGeneratedInterface] attribute
             return false;
         }
 

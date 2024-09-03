@@ -5,9 +5,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-using ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.GeneratorParsers;
+using ProgrammerAl.SourceGenerators.InterfaceGenerator.GeneratorParsers;
 
-namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator;
+namespace ProgrammerAl.SourceGenerators.InterfaceGenerator;
 
 [Generator]
 public class InterfaceGenerator : IIncrementalGenerator
@@ -21,7 +21,7 @@ public class InterfaceGenerator : IIncrementalGenerator
         IncrementalValuesProvider<SimpleInterfaceToGenerate?> interfacesToGenerate =
             context.SyntaxProvider
             .ForAttributeWithMetadataName(
-                SourceGenerationHelper.GenerateSimpleInterfaceAttributeFullName,
+                SourceGenerationHelper.GenerateInterfaceAttributeFullName,
                 predicate: static (node, _) => node is ClassDeclarationSyntax or RecordDeclarationSyntax,
                 transform: ClassParser.GetTypeToGenerate)
             .Where(static m => m is not null);
@@ -33,8 +33,6 @@ public class InterfaceGenerator : IIncrementalGenerator
 
     private static void GenerateInterface(in SimpleInterfaceToGenerate? interfaceToGenerate, SourceProductionContext context)
     {
-        //System.Diagnostics.Debugger.Launch();
-
         if (interfaceToGenerate is null)
         {
             return;

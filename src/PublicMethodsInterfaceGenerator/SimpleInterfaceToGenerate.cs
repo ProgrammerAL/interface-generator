@@ -5,13 +5,9 @@ using System.Text;
 
 using Microsoft.CodeAnalysis;
 
-using static ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.SimpleInterfaceToGenerate;
+using static ProgrammerAl.SourceGenerators.InterfaceGenerator.SimpleInterfaceToGenerate;
 
-namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator;
-
-//TODO: Include other items too
-//  Properties
-//  Events
+namespace ProgrammerAl.SourceGenerators.InterfaceGenerator;
 public record SimpleInterfaceToGenerate(
     string InterfaceName, 
     string ClassName, 

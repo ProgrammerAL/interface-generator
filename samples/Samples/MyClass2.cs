@@ -1,10 +1,10 @@
-﻿using ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.Extensions;
+﻿using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
 
 using Samples.NonDemoClasses;
 
 namespace Samples;
 
-[GenerateSimpleInterface(InterfaceName = "MyClass2Interface")]
+[GenerateInterface(InterfaceName = "MyClass2Interface")]
 public class MyClass2 : MyClass2Interface
 {
     public string GenerateString() => GenerateString_Private();

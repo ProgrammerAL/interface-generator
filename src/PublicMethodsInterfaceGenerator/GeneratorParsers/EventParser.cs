@@ -5,7 +5,7 @@ using System.Text;
 
 using Microsoft.CodeAnalysis;
 
-namespace ProgrammerAl.SourceGenerators.PublicMethodsInterfaceGenerator.GeneratorParsers;
+namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.GeneratorParsers;
 
 public static class EventParser
 {
@@ -32,6 +32,11 @@ public static class EventParser
         else if (symbol.DeclaredAccessibility != Accessibility.Public)
         {
             //Only public
+            return false;
+        }
+        else if (symbol.GetAttributes().Any(x => x.AttributeClass?.Name is SourceGenerationHelper.ExcludeFromGeneratedInterfaceAttributeName))
+        {
+            //Don't include methods that have the [IgnoreInGeneratedInterface] attribute
             return false;
         }
 
