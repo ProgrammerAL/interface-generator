@@ -5,17 +5,16 @@ using System.Text;
 
 using Microsoft.CodeAnalysis;
 
-using static ProgrammerAl.SourceGenerators.InterfaceGenerator.SimpleInterfaceToGenerate;
+using static ProgrammerAl.SourceGenerators.InterfaceGenerator.InterfaceToGenerateInfo;
 
 namespace ProgrammerAl.SourceGenerators.InterfaceGenerator;
-public record SimpleInterfaceToGenerate(
+public record InterfaceToGenerateInfo(
     string InterfaceName, 
     string ClassName, 
     string FullNamespace, 
     ImmutableArray<Method> Methods,
     ImmutableArray<Property> Properties,
-    ImmutableArray<Event> Events
-    )
+    ImmutableArray<Event> Events)
 {
     public record Method(string Name, string ReturnType, ImmutableArray<Argument> Arguments)
     { 

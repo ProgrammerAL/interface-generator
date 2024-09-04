@@ -9,7 +9,7 @@ namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.GeneratorParsers;
 
 public static class PropertyParser
 {
-    public static SimpleInterfaceToGenerate.Property? ExtractProperty(IPropertySymbol symbol)
+    public static InterfaceToGenerateInfo.Property? ExtractProperty(IPropertySymbol symbol)
     {
         if (!IsSymbolValid(symbol))
         {
@@ -24,7 +24,7 @@ public static class PropertyParser
 
         if (hasValidGet || hasValidSet)
         {
-            return new SimpleInterfaceToGenerate.Property(propertyName, dataType, hasValidGet, hasValidSet);
+            return new InterfaceToGenerateInfo.Property(propertyName, dataType, hasValidGet, hasValidSet);
         }
 
         //If neither getter nor setter is public, then don't include this property

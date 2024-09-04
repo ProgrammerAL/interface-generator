@@ -10,15 +10,15 @@ using ProgrammerAl.SourceGenerators.InterfaceGenerator.GeneratorParsers;
 namespace ProgrammerAl.SourceGenerators.InterfaceGenerator;
 
 [Generator]
-public class InterfaceGenerator : IIncrementalGenerator
+public class InterfaceSourceGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         // Add the marker attribute
         context.RegisterPostInitializationOutput(static ctx => ctx.AddSource(
-            "SimpleInterfaceAttribute.g.cs", SourceText.From(SourceGenerationHelper.AttributeClassCode, Encoding.UTF8)));
+            $"{SourceGenerationHelper.GenerateInterfaceAttributeName}.g.cs", SourceText.From(SourceGenerationHelper.AttributeClassCode, Encoding.UTF8)));
 
-        IncrementalValuesProvider<SimpleInterfaceToGenerate?> interfacesToGenerate =
+        IncrementalValuesProvider<InterfaceToGenerateInfo?> interfacesToGenerate =
             context.SyntaxProvider
             .ForAttributeWithMetadataName(
                 SourceGenerationHelper.GenerateInterfaceAttributeFullName,
@@ -31,15 +31,15 @@ public class InterfaceGenerator : IIncrementalGenerator
             static (spc, source) => GenerateInterface(source, spc));
     }
 
-    private static void GenerateInterface(in SimpleInterfaceToGenerate? interfaceToGenerate, SourceProductionContext context)
+    private static void GenerateInterface(in InterfaceToGenerateInfo? interfaceInfo, SourceProductionContext context)
     {
-        if (interfaceToGenerate is null)
+        if (interfaceInfo is null)
         {
             return;
         }
 
-        var codeString = SourceGenerationHelper.GenerateInterface(in interfaceToGenerate);
+        var codeString = SourceGenerationHelper.GenerateInterface(in interfaceInfo);
         var sourceText = SourceText.From(codeString, Encoding.UTF8);
-        context.AddSource($"{interfaceToGenerate.InterfaceName}.g.cs", sourceText);
+        context.AddSource($"{interfaceInfo.InterfaceName}.g.cs", sourceText);
     }
 }

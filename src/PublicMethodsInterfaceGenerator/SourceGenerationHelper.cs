@@ -41,24 +41,24 @@ namespace {GenerateInterfaceAttributeNameSpace}
 }}
 ";
 
-    public static string GenerateInterface(in SimpleInterfaceToGenerate interfaceToGenerate)
+    public static string GenerateInterface(in InterfaceToGenerateInfo interfaceInfo)
     {
         var builder = new StringBuilder();
-        _ = builder.AppendLine($"namespace {interfaceToGenerate.FullNamespace};");
+        _ = builder.AppendLine($"namespace {interfaceInfo.FullNamespace};");
         _ = builder.AppendLine();
-        _ = builder.AppendLine($"public interface {interfaceToGenerate.InterfaceName}");
+        _ = builder.AppendLine($"public interface {interfaceInfo.InterfaceName}");
         _ = builder.AppendLine("{");
-        foreach (var outputEvent in interfaceToGenerate.Events)
+        foreach (var outputEvent in interfaceInfo.Events)
         {
             _ = builder.AppendLine($"    {outputEvent.ToEventString()}");
         }
 
-        foreach (var property in interfaceToGenerate.Properties)
+        foreach (var property in interfaceInfo.Properties)
         {
             _ = builder.AppendLine($"    {property.ToPropertyString()}");
         }
 
-        foreach (var method in interfaceToGenerate.Methods)
+        foreach (var method in interfaceInfo.Methods)
         {
             _ = builder.AppendLine($"    {method.ToMethodString()}");
         }

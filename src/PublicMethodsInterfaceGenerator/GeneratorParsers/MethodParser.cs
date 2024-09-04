@@ -9,7 +9,7 @@ namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.GeneratorParsers;
 
 public static class MethodParser
 {
-    public static SimpleInterfaceToGenerate.Method? ExtractMethod(IMethodSymbol symbol)
+    public static InterfaceToGenerateInfo.Method? ExtractMethod(IMethodSymbol symbol)
     {
         if (!IsSymbolValid(symbol))
         {
@@ -27,7 +27,7 @@ public static class MethodParser
             returnType = symbol.ReturnType.ToString();
         }
 
-        var argumentBuilder = ImmutableArray.CreateBuilder<SimpleInterfaceToGenerate.Argument>();
+        var argumentBuilder = ImmutableArray.CreateBuilder<InterfaceToGenerateInfo.Argument>();
 
         foreach (var methodParameter in symbol.Parameters)
         {
@@ -35,11 +35,11 @@ public static class MethodParser
             var dataType = methodParameter.Type.ToDisplayString();
             var nullableAnnotation = methodParameter.NullableAnnotation;
 
-            var interfaceArgument = new SimpleInterfaceToGenerate.Argument(argName, dataType, nullableAnnotation);
+            var interfaceArgument = new InterfaceToGenerateInfo.Argument(argName, dataType, nullableAnnotation);
             argumentBuilder.Add(interfaceArgument);
         }
 
-        return new SimpleInterfaceToGenerate.Method(methodName, returnType, argumentBuilder.ToImmutableArray());
+        return new InterfaceToGenerateInfo.Method(methodName, returnType, argumentBuilder.ToImmutableArray());
     }
 
     private static bool IsSymbolValid(IMethodSymbol symbol)

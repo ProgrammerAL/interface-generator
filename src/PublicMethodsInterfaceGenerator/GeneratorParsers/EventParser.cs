@@ -9,7 +9,7 @@ namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.GeneratorParsers;
 
 public static class EventParser
 {
-    public static SimpleInterfaceToGenerate.Event? ExtractEvent(IEventSymbol symbol)
+    public static InterfaceToGenerateInfo.Event? ExtractEvent(IEventSymbol symbol)
     {
         if (!IsSymbolValid(symbol))
         {
@@ -19,7 +19,7 @@ public static class EventParser
         string? name = symbol!.Name;
         string dataType = symbol.Type.ToDisplayString();
 
-        return new SimpleInterfaceToGenerate.Event(name, dataType);
+        return new InterfaceToGenerateInfo.Event(name, dataType);
     }
 
     private static bool IsSymbolValid(IEventSymbol symbol)

@@ -9,7 +9,7 @@ namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.GeneratorParsers;
 
 public static class ClassParser
 {
-    public static SimpleInterfaceToGenerate? GetTypeToGenerate(GeneratorAttributeSyntaxContext context, CancellationToken ct)
+    public static InterfaceToGenerateInfo? GetTypeToGenerate(GeneratorAttributeSyntaxContext context, CancellationToken ct)
     {
         var symbol = context.TargetSymbol as INamedTypeSymbol;
         if (symbol is null)
@@ -51,14 +51,14 @@ public static class ClassParser
         return TryExtractSymbols(symbol, interfaceName, namespaceName);
     }
 
-    private static SimpleInterfaceToGenerate? TryExtractSymbols(INamedTypeSymbol symbol, string? customInterfaceName, string? namespaceName)
+    private static InterfaceToGenerateInfo? TryExtractSymbols(INamedTypeSymbol symbol, string? customInterfaceName, string? namespaceName)
     {
         var interfaceName = customInterfaceName ?? $"I{symbol.Name}";
         var nameSpace = namespaceName ?? (symbol.ContainingNamespace.IsGlobalNamespace ? string.Empty : symbol.ContainingNamespace.ToString());
 
-        var methodsBuilder = ImmutableArray.CreateBuilder<SimpleInterfaceToGenerate.Method>();
-        var propertiesBuilder = ImmutableArray.CreateBuilder<SimpleInterfaceToGenerate.Property>();
-        var eventsBuilder = ImmutableArray.CreateBuilder<SimpleInterfaceToGenerate.Event>();
+        var methodsBuilder = ImmutableArray.CreateBuilder<InterfaceToGenerateInfo.Method>();
+        var propertiesBuilder = ImmutableArray.CreateBuilder<InterfaceToGenerateInfo.Property>();
+        var eventsBuilder = ImmutableArray.CreateBuilder<InterfaceToGenerateInfo.Event>();
 
         var members = symbol.GetMembers();
         foreach (var member in members)
@@ -89,7 +89,7 @@ public static class ClassParser
             }
         }
 
-        return new SimpleInterfaceToGenerate(
+        return new InterfaceToGenerateInfo(
             InterfaceName: interfaceName,
             ClassName: symbol.Name,
             FullNamespace: nameSpace,
