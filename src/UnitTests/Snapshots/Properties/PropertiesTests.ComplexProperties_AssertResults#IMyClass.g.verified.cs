@@ -1,7 +1,7 @@
 ﻿//HintName: IMyClass.g.cs
-namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
 public interface IMyClass
 {
-    ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses.NonDemoClass1? ComplexProperty1 { get; set; }
+    ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses.NonDemoClass1? ComplexProperty1 { get; set; }
 }

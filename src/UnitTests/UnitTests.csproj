@@ -34,11 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Snapshots\Events\" />
-    <Folder Include="Snapshots\Methods\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\PublicMethodsInterfaceGenerator\PublicMethodsInterfaceGenerator.csproj" />
   </ItemGroup>
 

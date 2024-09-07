@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
-using ProgrammerAl.SourceGenerators.InterfaceGenerator;
+using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator;
 
 namespace UnitTests;
 public static class TestHelper

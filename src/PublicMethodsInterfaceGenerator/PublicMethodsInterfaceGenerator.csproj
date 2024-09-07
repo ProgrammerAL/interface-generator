@@ -8,7 +8,7 @@
 		<LangVersion>Latest</LangVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<RootNamespace>ProgrammerAl.SourceGenerators.InterfaceGenerator</RootNamespace>
+		<RootNamespace>ProgrammerAl.SourceGenerators.PublicInterfaceGenerator</RootNamespace>
 		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 	</PropertyGroup>
 

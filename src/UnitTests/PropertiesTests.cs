@@ -10,8 +10,8 @@ public class PropertiesTests
     public async Task SimpleProperties_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass
@@ -37,8 +37,8 @@ public class PropertiesTests
     public async Task RecordSimpleProperties_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute]
             public record MyClass : IMyClass
@@ -64,8 +64,8 @@ public class PropertiesTests
     public async Task RecordSimplePropertiesInConstuctor_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute]
             public record MyClass(string FirstName, string? MiddleName, string LastName) : IMyClass;
@@ -78,8 +78,8 @@ public class PropertiesTests
     public async Task PrivateGettersProperties_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass
@@ -97,8 +97,8 @@ public class PropertiesTests
     public async Task PrivateSettersProperties_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass
@@ -116,8 +116,8 @@ public class PropertiesTests
     public async Task PrivateOnlyProperties_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass
@@ -135,8 +135,8 @@ public class PropertiesTests
     public async Task ComplexProperties_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass
@@ -156,8 +156,8 @@ public class PropertiesTests
     public async Task WithExcludedProperties_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass

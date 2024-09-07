@@ -10,8 +10,8 @@ public class MethodsTests
     public async Task SimpleMethodArguments_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass
@@ -34,8 +34,8 @@ public class MethodsTests
     public async Task RecordSimpleMethodArguments_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute]
             public record MyClass : IMyClass
@@ -58,8 +58,8 @@ public class MethodsTests
     public async Task EmptyMethodsArguments_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass
@@ -76,8 +76,8 @@ public class MethodsTests
     public async Task ComplexMethodArgument_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass
@@ -97,8 +97,8 @@ public class MethodsTests
     public async Task WithExcludedMethods_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.UnitTestClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass
@@ -122,8 +122,8 @@ public class MethodsTests
     //public async Task NoMethods_AssertResults()
     //{
     //    var source = """
-    //        using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-    //        namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.SampleClasses;
+    //        using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+    //        namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.SampleClasses;
 
     //        [GenerateInterfaceAttribute]
     //        public class MyClass : IMyClass

@@ -5,9 +5,9 @@ using System.Text;
 
 using Microsoft.CodeAnalysis;
 
-using static ProgrammerAl.SourceGenerators.InterfaceGenerator.InterfaceToGenerateInfo;
+using static ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.InterfaceToGenerateInfo;
 
-namespace ProgrammerAl.SourceGenerators.InterfaceGenerator;
+namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator;
 public record InterfaceToGenerateInfo(
     string InterfaceName, 
     string ClassName, 

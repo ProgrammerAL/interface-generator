@@ -1,4 +1,4 @@
-﻿using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
+﻿using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
 
 namespace Samples;
 

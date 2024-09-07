@@ -5,9 +5,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-using ProgrammerAl.SourceGenerators.InterfaceGenerator.GeneratorParsers;
+using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.GeneratorParsers;
 
-namespace ProgrammerAl.SourceGenerators.InterfaceGenerator;
+namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator;
 
 [Generator]
 public class InterfaceSourceGenerator : IIncrementalGenerator

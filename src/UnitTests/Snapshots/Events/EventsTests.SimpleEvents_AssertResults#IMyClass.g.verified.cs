@@ -1,5 +1,5 @@
 ﻿//HintName: IMyClass.g.cs
-namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.SampleClasses;
+namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.SampleClasses;
 
 public interface IMyClass
 {

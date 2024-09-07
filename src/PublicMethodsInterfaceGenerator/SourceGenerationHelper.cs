@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProgrammerAl.SourceGenerators.InterfaceGenerator;
+namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator;
 
 public static class SourceGenerationHelper
 {
     public const string GenerateInterfaceAttributeName = "GenerateInterfaceAttribute";
-    public const string GenerateInterfaceAttributeNameSpace = "ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes";
+    public const string GenerateInterfaceAttributeNameSpace = "ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes";
     public const string GenerateInterfaceAttributeFullName = $"{GenerateInterfaceAttributeNameSpace}.{GenerateInterfaceAttributeName}";
 
     public const string ExcludeFromGeneratedInterfaceAttributeName = "ExcludeFromGeneratedInterfaceAttribute";

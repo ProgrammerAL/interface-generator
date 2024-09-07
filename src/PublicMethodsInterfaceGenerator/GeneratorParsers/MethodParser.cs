@@ -5,7 +5,7 @@ using System.Text;
 
 using Microsoft.CodeAnalysis;
 
-namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.GeneratorParsers;
+namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.GeneratorParsers;
 
 public static class MethodParser
 {

@@ -10,8 +10,8 @@ public class EventsTests
     public async Task SimpleEvents_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.SampleClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.SampleClasses;
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass
@@ -32,8 +32,8 @@ public class EventsTests
     public async Task ActionEvents_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.SampleClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.SampleClasses;
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass
@@ -56,8 +56,8 @@ public class EventsTests
     public async Task CustomEvents_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.SampleClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.SampleClasses;
 
             public delegate void MyEventDelegate(object sender, EventArgs e);
             
@@ -81,8 +81,8 @@ public class EventsTests
     public async Task WithExcludedEvents_AssertResults()
     {
         var source = """
-            using ProgrammerAl.SourceGenerators.InterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.InterfaceGenerator.SampleClasses;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.SampleClasses;
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass
