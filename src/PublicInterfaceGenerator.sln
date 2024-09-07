@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicMethodsInterfaceGenerator", "PublicMethodsInterfaceGenerator\PublicMethodsInterfaceGenerator.csproj", "{0B2D223E-3D20-4A06-9CFE-F7CC8C450552}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicInterfaceGenerator", "PublicInterfaceGenerator\PublicInterfaceGenerator.csproj", "{0B2D223E-3D20-4A06-9CFE-F7CC8C450552}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples", "..\samples\Samples\Samples.csproj", "{7C1CFAC0-14C2-40B7-A257-7735DF5415A9}"
 EndProject
