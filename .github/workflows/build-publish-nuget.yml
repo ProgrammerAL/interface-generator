@@ -31,7 +31,7 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Cake Frosting Build and Push NuGet
-        run: dotnet run --project ${{ github.workspace }}/build/Build.csproj -- --srcDirectoryPath=${{ env.SRC_DIRECTORY_PATH_LIB }} --nugetVersion=${{ env.NUGET_VERSION }} --push_nuget=${{ github.event.inputs.push_nuget }}
+        run: dotnet run --project ${{ github.workspace }}/build/Build.csproj -- --srcDirectoryPath=${{ env.SRC_DIRECTORY_PATH_LIB }} --nugetVersion=${{ env.NUGET_VERSION }} --push_nuget=${{ inputs.push_nuget }}
 
       # - name: Publish NuGet - Lib
       #   run: dotnet nuget push "${{ env.SRC_DIRECTORY_PATH_LIB }}/${{ env.PROJECT_NAME_LIB }}/bin/${{ env.CONFIGURATION }}/cake-build-output/*${{ env.NUGET_VERSION }}.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key ${{ secrets.NUGET_API_KEY }}
