@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Microsoft.CodeAnalysis;
+
 namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator;
 
 public static class SourceGenerationHelper
@@ -44,6 +46,11 @@ namespace {GenerateInterfaceAttributeNameSpace}
     public static string GenerateInterface(in InterfaceToGenerateInfo interfaceInfo)
     {
         var builder = new StringBuilder();
+        if (ShouldEnableNullableReferences(interfaceInfo))
+        {
+            _ = builder.AppendLine($"#nullable enable");
+        }
+
         _ = builder.AppendLine($"namespace {interfaceInfo.FullNamespace};");
         _ = builder.AppendLine();
         _ = builder.AppendLine($"public interface {interfaceInfo.InterfaceName}");
@@ -66,5 +73,15 @@ namespace {GenerateInterfaceAttributeNameSpace}
         _ = builder.AppendLine("}");
 
         return builder.ToString();
+    }
+
+    private static bool ShouldEnableNullableReferences(in InterfaceToGenerateInfo interfaceInfo)
+    {
+        return interfaceInfo.Methods.Any(m => m.Arguments.Any(a => a.NullableAnnotation == NullableAnnotation.Annotated)
+                                              || m.ReturnType.EndsWith("?"))
+            || interfaceInfo.Properties.Any(x => x.ReturnType.EndsWith("?"))
+            || interfaceInfo.Events.Any(x => x.EventDataType.EndsWith("?"));
+
+
     }
 }
