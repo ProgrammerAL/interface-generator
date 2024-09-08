@@ -21,7 +21,7 @@ public record ProjectPaths(
         var pathToSln = srcDirectory + $"/{projectName}.sln";
         var projectDir = srcDirectory + $"/{projectName}";
         var csProjFile = projectDir + $"/{projectName}.csproj";
-        var unitTestsProj = srcDirectory + $"UnitTests/UnitTests.csproj";
+        var unitTestsProj = srcDirectory + $"/UnitTests/UnitTests.csproj";
         var outDir = projectDir + $"/bin/{buildConfiguration}/cake-build-output";
 
         return new ProjectPaths(
