@@ -10,17 +10,17 @@ on:
         required: true
         type: boolean
         default: false
-      nuget_version_override:
+      nuget_version:
         description: "The value to use for the NuGet Version that is pushed, if it is pushed"
-        required: false
+        required: true
         type: string
+        default: 0.0.1-preview.${{ github.run_number }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       DOTNET_VERSION: 8.0.x
-      PREVIEW_NUGET_VERSION: 0.0.1-preview.${{ github.run_number }}
       SRC_DIRECTORY_PATH_LIB: ${{ github.workspace }}/src
       PROJECT_NAME_LIB: PublicInterfaceGenerator
 
@@ -31,7 +31,7 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Cake Frosting Build and Push NuGet
-        run: dotnet run --project ${{ github.workspace }}/build/Build.csproj -- --srcDirectoryPath=${{ env.SRC_DIRECTORY_PATH_LIB }} --previewNugetVersion=${{ env.PREVIEW_NUGET_VERSION }} --nugetVersionOverride="${{ github.event.inputs.nuget_version_override }}" --push_nuget=${{ github.event.inputs.push_nuget }}
+        run: dotnet run --project ${{ github.workspace }}/build/Build.csproj -- --srcDirectoryPath=${{ env.SRC_DIRECTORY_PATH_LIB }} --nugetVersion=${{ github.event.inputs.nuget_version }} --push_nuget=${{ github.event.inputs.push_nuget }}
 
       # - name: Publish NuGet - Lib
       #   run: dotnet nuget push "${{ env.SRC_DIRECTORY_PATH_LIB }}/${{ env.PROJECT_NAME_LIB }}/bin/${{ env.CONFIGURATION }}/cake-build-output/*${{ env.NUGET_VERSION }}.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key ${{ secrets.NUGET_API_KEY }}

@@ -37,22 +37,10 @@ public class BuildContext : FrostingContext
     {
         Target = context.Argument("target", "Default");
         SrcDirectoryPath = LoadParameter(context, "srcDirectoryPath");
-        NugetVersion = LoadNugetVersion(context);
+        NugetVersion = LoadParameter(context, "nugetVersion");
         PushNuget = context.Argument<bool>("push_nuget", false);
 
         ProjectPaths = ProjectPaths.LoadFromContext(context, BuildConfiguration, SrcDirectoryPath);
-    }
-
-    private string LoadNugetVersion(ICakeContext context)
-    {
-        //Use the override if provided, otherwise use the previewNugetVersion
-        var nugetVersion = context.Arguments.GetArgument("nugetVersionOverride");
-        if (string.IsNullOrWhiteSpace(NugetVersion))
-        {
-            nugetVersion = LoadParameter(context, "previewNugetVersion");
-        }
-
-        return nugetVersion;
     }
 
     private string LoadParameter(ICakeContext context, string parameterName)
