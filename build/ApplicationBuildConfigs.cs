@@ -13,9 +13,10 @@ public record ProjectPaths(
     string ProjectFolder,
     string CsprojFile,
     string UnitTestProj,
-    string OutDir)
+    string OutDir,
+    string NuGetFilePath)
 {
-    public static ProjectPaths LoadFromContext(ICakeContext context, string buildConfiguration, string srcDirectory)
+    public static ProjectPaths LoadFromContext(ICakeContext context, string buildConfiguration, string srcDirectory, string nugetVersion)
     {
         var projectName = "PublicInterfaceGenerator";
         var pathToSln = srcDirectory + $"/{projectName}.sln";
@@ -23,6 +24,7 @@ public record ProjectPaths(
         var csProjFile = projectDir + $"/{projectName}.csproj";
         var unitTestsProj = srcDirectory + $"/UnitTests/UnitTests.csproj";
         var outDir = projectDir + $"/bin/{buildConfiguration}/cake-build-output";
+        var nugetFilePath = outDir + $"/*{nugetVersion}.nupkg";
 
         return new ProjectPaths(
             projectName,
@@ -30,6 +32,7 @@ public record ProjectPaths(
             projectDir,
             csProjFile,
             unitTestsProj,
-            outDir);
+            outDir,
+            nugetFilePath);
     }
 };

@@ -30,6 +30,7 @@ public class BuildContext : FrostingContext
     public string SrcDirectoryPath { get; }
     public string NugetVersion { get; }
     public bool PushNuget { get; }
+    public string NuGetPushToken { get; }
     public ProjectPaths ProjectPaths { get; }
 
     public BuildContext(ICakeContext context)
@@ -38,9 +39,10 @@ public class BuildContext : FrostingContext
         Target = context.Argument("target", "Default");
         SrcDirectoryPath = LoadParameter(context, "srcDirectoryPath");
         NugetVersion = LoadParameter(context, "nugetVersion");
-        PushNuget = context.Argument<bool>("push_nuget", false);
-
-        ProjectPaths = ProjectPaths.LoadFromContext(context, BuildConfiguration, SrcDirectoryPath);
+        NuGetPushToken = LoadParameter(context, "nuGetPushToken");
+        PushNuget = context.Argument<bool>("pushNuget", false);
+        
+        ProjectPaths = ProjectPaths.LoadFromContext(context, BuildConfiguration, SrcDirectoryPath, NugetVersion);
     }
 
     private string LoadParameter(ICakeContext context, string parameterName)
@@ -71,7 +73,7 @@ public sealed class BuildTask : FrostingTask<BuildContext>
 
         BuildDotnetApp(context, context.ProjectPaths.PathToSln);
         TestDotnetApp(context, context.ProjectPaths.UnitTestProj);
-        PublishDotnetApp(context, context.ProjectPaths.OutDir, context.ProjectPaths.CsprojFile);
+        PackNugetPackage(context, context.ProjectPaths.OutDir, context.ProjectPaths.CsprojFile);
     }
 
     private void BuildDotnetApp(BuildContext context, string pathToSln)
@@ -97,7 +99,7 @@ public sealed class BuildTask : FrostingTask<BuildContext>
         context.DotNetTest(pathToUnitTestProj, testSettings);
     }
 
-    private void PublishDotnetApp(BuildContext context, string outDir, string csprojFile)
+    private void PackNugetPackage(BuildContext context, string outDir, string csprojFile)
     {
         context.DotNetPack(csprojFile, new Cake.Common.Tools.DotNet.Pack.DotNetPackSettings
         {
@@ -111,8 +113,22 @@ public sealed class BuildTask : FrostingTask<BuildContext>
     }
 }
 
-[TaskName("Default")]
 [IsDependentOn(typeof(BuildTask))]
+[TaskName(nameof(NugetPushTask))]
+public sealed class NugetPushTask : FrostingTask<BuildContext>
+{
+    public override void Run(BuildContext context)
+    {
+        context.DotNetNuGetPush(context.ProjectPaths.NuGetFilePath, new Cake.Common.Tools.DotNet.NuGet.Push.DotNetNuGetPushSettings
+        { 
+            Source = "https://api.nuget.org/v3/index.json",
+            ApiKey = context.NuGetPushToken
+        });
+    }
+}
+
+[TaskName("Default")]
+[IsDependentOn(typeof(NugetPushTask))]
 public class DefaultTask : FrostingTask
 {
 }
