@@ -119,6 +119,11 @@ public sealed class NugetPushTask : FrostingTask<BuildContext>
 {
     public override void Run(BuildContext context)
     {
+        if (!context.PushNuget)
+        {
+            return;
+        }
+
         context.DotNetNuGetPush(context.ProjectPaths.NuGetFilePath, new Cake.Common.Tools.DotNet.NuGet.Push.DotNetNuGetPushSettings
         { 
             Source = "https://api.nuget.org/v3/index.json",
