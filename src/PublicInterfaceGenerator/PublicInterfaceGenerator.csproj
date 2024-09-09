@@ -10,12 +10,13 @@
 		<Nullable>enable</Nullable>
 		<RootNamespace>ProgrammerAl.SourceGenerators.PublicInterfaceGenerator</RootNamespace>
 		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<TreatSpecificWarningsAsErrors />
-		<NoWarn>$(NoWarn);NU5104</NoWarn>
+		<NoWarn>$(NoWarn);NU5104;NU5128</NoWarn>
 		<LangVersion>preview</LangVersion>
 		<Nullable>enable</Nullable>
 		<Version>0.0.1</Version>
@@ -29,5 +30,6 @@
 	<!-- Package the generator in the analyzer directory of the nuget package -->
 	<ItemGroup>
 		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="README.md" Pack="true" PackagePath="\"/>
 	</ItemGroup>
 </Project>
