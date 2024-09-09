@@ -108,6 +108,7 @@ public sealed class BuildTask : FrostingTask<BuildContext>
             NoBuild = true,
             Configuration = BuildContext.BuildConfiguration,
             OutputDirectory = outDir,
+            VersionSuffix = context.NugetVersion,
             ArgumentCustomization = (args) => args.Append($"-p:PackageVersion={context.NugetVersion}")
         });
     }
