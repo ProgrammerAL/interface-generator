@@ -6,12 +6,12 @@ on:
   workflow_dispatch:
     inputs:
       push_nuget:
-        description: "If the packaged should be pushed to nuget.org"
+        description: "Push to nuget.org"
         required: true
         type: boolean
         default: false
       nuget_version_override:
-        description: "The value to use for the NuGet Version that is pushed, if it is pushed"
+        description: "Nuget Version Override"
         required: false
         type: string
 
