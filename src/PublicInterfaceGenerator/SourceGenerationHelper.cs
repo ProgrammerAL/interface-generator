@@ -20,6 +20,7 @@ public static class SourceGenerationHelper
 
     public const string AttributeClassCode =
 @$"
+#nullable enable
 namespace {GenerateInterfaceAttributeNameSpace}
 {{
     [System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
