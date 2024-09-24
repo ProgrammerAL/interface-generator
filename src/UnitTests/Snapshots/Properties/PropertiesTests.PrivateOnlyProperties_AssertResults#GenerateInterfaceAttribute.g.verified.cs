@@ -1,5 +1,6 @@
 ﻿//HintName: GenerateInterfaceAttribute.g.cs
 
+#nullable enable
 namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes
 {
     [System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
