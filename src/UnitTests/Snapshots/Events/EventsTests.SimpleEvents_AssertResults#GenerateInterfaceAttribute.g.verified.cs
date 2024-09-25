@@ -31,7 +31,7 @@ namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes
         public bool IsIDisposable { get; set; } = false;
     }
 
-    [System.AttributeUsage(System.AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event, Inherited = false, AllowMultiple = false)]
+    [System.AttributeUsage(System.AttributeTargets.Method | System.AttributeTargets.Property | System.AttributeTargets.Event, Inherited = false, AllowMultiple = false)]
     public class ExcludeFromGeneratedInterfaceAttribute : System.Attribute
     {
     }

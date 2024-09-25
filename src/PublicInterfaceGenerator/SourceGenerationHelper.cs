@@ -53,7 +53,7 @@ namespace {GenerateInterfaceAttributeNameSpace}
         public bool {AttributeProperty_IsIDisposable} {{ get; set; }} = false;
     }}
 
-    [System.AttributeUsage(System.AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event, Inherited = false, AllowMultiple = false)]
+    [System.AttributeUsage(System.AttributeTargets.Method | System.AttributeTargets.Property | System.AttributeTargets.Event, Inherited = false, AllowMultiple = false)]
     public class {ExcludeFromGeneratedInterfaceAttributeName} : System.Attribute
     {{
     }}
