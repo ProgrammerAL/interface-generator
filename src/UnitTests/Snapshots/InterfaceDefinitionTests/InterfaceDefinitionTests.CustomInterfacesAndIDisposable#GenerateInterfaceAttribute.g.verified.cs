@@ -1,10 +1,11 @@
 ﻿//HintName: GenerateInterfaceAttribute.g.cs
 
 #nullable enable
+using System;
 namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes
 {
-    [System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public class GenerateInterfaceAttribute : System.Attribute
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    public class GenerateInterfaceAttribute : Attribute
     {
         /// <summary>
         /// Set this to override the default interface name. Or leave it null to use the class name with an 'I' prepended to it.
@@ -31,9 +32,8 @@ namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes
         public bool IsIDisposable { get; set; } = false;
     }
 
-    [System.AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event, Inherited = false, AllowMultiple = false)]
-    public class ExcludeFromGeneratedInterfaceAttribute : System.Attribute
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event, Inherited = false, AllowMultiple = false)]
+    public class ExcludeFromGeneratedInterfaceAttribute : Attribute
     {
     }
 }
-

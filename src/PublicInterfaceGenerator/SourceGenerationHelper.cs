@@ -23,10 +23,11 @@ public static class SourceGenerationHelper
     public const string AttributeClassCode =
 @$"
 #nullable enable
+using System;
 namespace {GenerateInterfaceAttributeNameSpace}
 {{
-    [System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public class {GenerateInterfaceAttributeName} : System.Attribute
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    public class {GenerateInterfaceAttributeName} : Attribute
     {{
         /// <summary>
         /// Set this to override the default interface name. Or leave it null to use the class name with an 'I' prepended to it.
@@ -53,8 +54,8 @@ namespace {GenerateInterfaceAttributeNameSpace}
         public bool {AttributeProperty_IsIDisposable} {{ get; set; }} = false;
     }}
 
-    [System.AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event, Inherited = false, AllowMultiple = false)]
-    public class {ExcludeFromGeneratedInterfaceAttributeName} : System.Attribute
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event, Inherited = false, AllowMultiple = false)]
+    public class {ExcludeFromGeneratedInterfaceAttributeName} : Attribute
     {{
     }}
 }}

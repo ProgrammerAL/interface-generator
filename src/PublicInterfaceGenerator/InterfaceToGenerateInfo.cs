@@ -27,7 +27,7 @@ public record InterfaceToGenerateInfo(
         }
         else
         {
-            return $"{comments}{Environment.NewLine}{definitionLine}";
+            return $"{comments}\n{definitionLine}";
         }
     }
 
