@@ -17,6 +17,8 @@ public static class SourceGenerationHelper
 
     public const string AttributeProperty_InterfaceName = "InterfaceName";
     public const string AttributeProperty_NamespaceName = "Namespace";
+    public const string AttributeProperty_Interfaces = "Interfaces";
+    public const string AttributeProperty_IsIDisposable = "IsIDisposable";
 
     public const string AttributeClassCode =
 @$"
@@ -35,6 +37,20 @@ namespace {GenerateInterfaceAttributeNameSpace}
         /// Set this to override the namespace to generate the interface in. By default, it will be the same as the class.
         /// </summary>
         public string? {AttributeProperty_NamespaceName} {{ get; set; }}
+
+        /// <summary>
+        /// Set this to specify the interfaces the generated interface will inherit from. For example, IDisposable. 
+        /// This should be a syntax-valid list as you would type it out normally because it will be concatenated directly into the interface definition.
+        /// For example: ""MyNamespace.MyInterface1, MyNamespace.MyInterface2""
+        /// </summary>
+        public string? {AttributeProperty_Interfaces} {{ get; set; }}
+
+        /// <summary>
+        /// Set this to specify the generates interface inherits from System.IDisposable.
+        /// This will be appended to the list of interfaces.
+        /// If you are also specifying interfaces with the ""{AttributeProperty_Interfaces}"" property, either set this to false and include ""System.IDisposable"" in the ""{AttributeProperty_Interfaces}"" property string, or set this to true and don't include ""System.IDisposable"" in the ""{AttributeProperty_Interfaces}"" property string.
+        /// </summary>
+        public bool {AttributeProperty_IsIDisposable} {{ get; set; }} = false;
     }}
 
     [System.AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event, Inherited = false, AllowMultiple = false)]
@@ -52,9 +68,23 @@ namespace {GenerateInterfaceAttributeNameSpace}
             _ = builder.AppendLine($"#nullable enable");
         }
 
+        var interfaceDefinitionLine = $"public interface {interfaceInfo.InterfaceName}";
+        if (!string.IsNullOrWhiteSpace(interfaceInfo.Interfaces))
+        {
+            interfaceDefinitionLine += $" : {interfaceInfo.Interfaces}";
+            if (interfaceInfo.InheritsFromIDisposable)
+            {
+                interfaceDefinitionLine += ", System.IDisposable";
+            }
+        }
+        else if (interfaceInfo.InheritsFromIDisposable)
+        {
+            interfaceDefinitionLine += " : System.IDisposable";
+        }
+
         _ = builder.AppendLine($"namespace {interfaceInfo.FullNamespace};");
         _ = builder.AppendLine();
-        _ = builder.AppendLine($"public interface {interfaceInfo.InterfaceName}");
+        _ = builder.AppendLine(interfaceDefinitionLine);
         _ = builder.AppendLine("{");
         foreach (var outputEvent in interfaceInfo.Events)
         {

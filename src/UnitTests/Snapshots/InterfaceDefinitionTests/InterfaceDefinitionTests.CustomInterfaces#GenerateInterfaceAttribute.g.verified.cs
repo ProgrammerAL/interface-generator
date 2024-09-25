@@ -36,3 +36,4 @@ namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes
     {
     }
 }
+

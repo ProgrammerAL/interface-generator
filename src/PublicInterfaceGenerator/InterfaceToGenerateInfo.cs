@@ -11,7 +11,9 @@ namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator;
 public record InterfaceToGenerateInfo(
     string InterfaceName, 
     string ClassName, 
-    string FullNamespace, 
+    string FullNamespace,
+    string Interfaces,
+    bool InheritsFromIDisposable,
     ImmutableArray<Method> Methods,
     ImmutableArray<Property> Properties,
     ImmutableArray<Event> Events)

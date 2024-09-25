@@ -22,6 +22,8 @@ public static class ClassParser
 
         string? interfaceName = null;
         string? namespaceName = null;
+        string? interfacesNames = null;
+        bool inheritsFromIDisposable = false;
 
         foreach (AttributeData attributeData in symbol.GetAttributes())
         {
@@ -45,13 +47,26 @@ public static class ClassParser
                 {
                     namespaceName = nsName;
                 }
+                else if (namedArgument.Key == SourceGenerationHelper.AttributeProperty_Interfaces
+                    && namedArgument.Value.Value?.ToString() is { } interfaces)
+                {
+                    interfacesNames = interfaces;
+                }
+                else if (namedArgument.Key == SourceGenerationHelper.AttributeProperty_IsIDisposable
+                    && namedArgument.Value.Value?.ToString() is { } isIDisposable)
+                {
+                    if (bool.TryParse(isIDisposable, out bool parsedIsIDisposable))
+                    {
+                        inheritsFromIDisposable = parsedIsIDisposable;
+                    }
+                }
             }
         }
 
-        return TryExtractSymbols(symbol, interfaceName, namespaceName);
+        return TryExtractSymbols(symbol, interfaceName, namespaceName, interfacesNames, inheritsFromIDisposable);
     }
 
-    private static InterfaceToGenerateInfo? TryExtractSymbols(INamedTypeSymbol symbol, string? customInterfaceName, string? namespaceName)
+    private static InterfaceToGenerateInfo? TryExtractSymbols(INamedTypeSymbol symbol, string? customInterfaceName, string? namespaceName, string? interfacesNames, bool inheritsFromIDisposable)
     {
         var interfaceName = customInterfaceName ?? $"I{symbol.Name}";
         var nameSpace = namespaceName ?? (symbol.ContainingNamespace.IsGlobalNamespace ? string.Empty : symbol.ContainingNamespace.ToString());
@@ -93,6 +108,8 @@ public static class ClassParser
             InterfaceName: interfaceName,
             ClassName: symbol.Name,
             FullNamespace: nameSpace,
+            Interfaces: interfacesNames ?? "",
+            InheritsFromIDisposable: inheritsFromIDisposable,
             Methods: methodsBuilder.ToImmutableArray(),
             Properties: propertiesBuilder.ToImmutableArray(),
             Events: eventsBuilder.ToImmutableArray());

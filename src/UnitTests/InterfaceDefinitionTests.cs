@@ -1,0 +1,105 @@
+#pragma warning disable IDE0058 // Expression value is never used
+
+namespace UnitTests;
+
+public class InterfaceDefinitionTests
+{
+    private const string SnapshotsDirectory = "Snapshots/InterfaceDefinitionTests";
+
+    [Fact]
+    public async Task DefaultName()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task DifferentName()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute(InterfaceName = "SomeOtherName")]
+            public class MyClass : SomeOtherName
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task CustomNamespace()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute(Namespace = "My.Custom.Namespace")]
+            public class MyClass : IMyClass
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task CustomInterfaces()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute(Interfaces = "MyCode.Interface1, MyCode.Interface2, MyCode.Interface3")]
+            public class MyClass : IMyClass
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task CustomInterfacesAndIDisposable()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute(IsIDisposable = true, Interfaces = "MyCode.Interface1, MyCode.Interface2, MyCode.Interface3")]
+            public class MyClass : IMyClass
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task IsIDisposable()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute(IsIDisposable = true)]
+            public class MyClass : IMyClass
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+}
+#pragma warning restore IDE0058 // Expression value is never used
