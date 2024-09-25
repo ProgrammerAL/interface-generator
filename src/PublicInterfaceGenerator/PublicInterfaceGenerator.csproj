@@ -9,9 +9,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<RootNamespace>ProgrammerAl.SourceGenerators.PublicInterfaceGenerator</RootNamespace>
+		<AssemblyName>ProgrammerAl.SourceGenerators.PublicInterfaceGenerator</AssemblyName>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<EnforceExtendedAnlyzerRules>true</EnforceExtendedAnlyzerRules>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
