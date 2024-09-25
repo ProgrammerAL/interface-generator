@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
+using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
 
@@ -9,8 +10,8 @@ using static ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.InterfaceToG
 
 namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator;
 public record InterfaceToGenerateInfo(
-    string InterfaceName, 
-    string ClassName, 
+    string InterfaceName,
+    string ClassName,
     string FullNamespace,
     string Interfaces,
     bool InheritsFromIDisposable,
@@ -18,9 +19,25 @@ public record InterfaceToGenerateInfo(
     ImmutableArray<Property> Properties,
     ImmutableArray<Event> Events)
 {
-    public record Method(string Name, string ReturnType, ImmutableArray<Argument> Arguments)
-    { 
-        public string ToMethodString() => $"{ReturnType} {Name}({string.Join(", ", Arguments.Select(a => a.ToArgumentString()))});";
+    internal static string CombineLineWithComments(string comments, string definitionLine)
+    {
+        if (string.IsNullOrWhiteSpace(comments))
+        {
+            return definitionLine;
+        }
+        else
+        {
+            return $"{comments}{Environment.NewLine}{definitionLine}";
+        }
+    }
+
+    public record Method(string Name, string ReturnType, ImmutableArray<Argument> Arguments, string Comments)
+    {
+        public string ToMethodString()
+        {
+            var definitionLine = $"{ReturnType} {Name}({string.Join(", ", Arguments.Select(a => a.ToArgumentString()))});";
+            return InterfaceToGenerateInfo.CombineLineWithComments(Comments, definitionLine);
+        }
     }
 
     public record Argument(string Name, string DataType, NullableAnnotation NullableAnnotation)
@@ -31,15 +48,21 @@ public record InterfaceToGenerateInfo(
         }
     }
 
-    public record Property(string Name, string ReturnType, bool HasValidGet, bool HasValidSet)
-    { 
-        public string ToPropertyString() 
-            => $"{ReturnType} {Name} {{ {(HasValidGet ? "get; " : "")}{(HasValidSet ? "set; " : "")}}}";
+    public record Property(string Name, string ReturnType, bool HasValidGet, bool HasValidSet, string Comments)
+    {
+        public string ToPropertyString()
+        {
+            var propertyLine = $"{ReturnType} {Name} {{ {(HasValidGet ? "get; " : "")}{(HasValidSet ? "set; " : "")}}}";
+            return InterfaceToGenerateInfo.CombineLineWithComments(Comments, propertyLine);
+        }
     }
 
-    public record Event(string Name, string EventDataType)
+    public record Event(string Name, string EventDataType, string Comments)
     {
         public string ToEventString()
-            => $"event {EventDataType} {Name};";
+        {
+            var eventLine = $"event {EventDataType} {Name};";
+            return InterfaceToGenerateInfo.CombineLineWithComments(Comments, eventLine);
+        }
     }
 }

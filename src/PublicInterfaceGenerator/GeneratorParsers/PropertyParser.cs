@@ -16,7 +16,9 @@ public static class PropertyParser
             return null;
         }
 
-        string? propertyName = symbol!.Name;
+        var propertyComments = CommentsBlockParser.ParseCommentsBlock(symbol);
+
+        string? propertyName = symbol.Name;
         string dataType = symbol.Type.ToDisplayString();
 
         var hasValidGet = symbol.GetMethod?.DeclaredAccessibility is Accessibility.Public;
@@ -24,7 +26,7 @@ public static class PropertyParser
 
         if (hasValidGet || hasValidSet)
         {
-            return new InterfaceToGenerateInfo.Property(propertyName, dataType, hasValidGet, hasValidSet);
+            return new InterfaceToGenerateInfo.Property(propertyName, dataType, hasValidGet, hasValidSet, propertyComments);
         }
 
         //If neither getter nor setter is public, then don't include this property
@@ -48,7 +50,36 @@ public static class PropertyParser
             //Don't include methods that have the [IgnoreInGeneratedInterface] attribute
             return false;
         }
+        else if (IsPropertyFromInheritedInterface(symbol))
+        {
+            //If the property exists because of an interface it's implementing
+            //  don't include the property in the interface we generate
+            //Note: If the property from the inherited interface has a different accessibility for the getter or setter, it still won't be included
+            //  For example, interface has property `string Name { get; }`, but the concrete class impliments property `public string Name { get; set; }`
+            //      The property won't be included in the generated interface
+            return false;
+        }
 
         return true;
+    }
+
+    private static bool IsPropertyFromInheritedInterface(IPropertySymbol symbol)
+    {
+        var interfaces = symbol.ContainingType.AllInterfaces;
+
+        foreach (var implementedInterface in interfaces)
+        {
+            var interfaceProperties = implementedInterface.GetMembers().OfType<IPropertySymbol>();
+            foreach (var interfaceProperty in interfaceProperties)
+            {
+                var containingTypeImplementation = symbol.ContainingType.FindImplementationForInterfaceMember(interfaceProperty);
+                if (symbol.Equals(containingTypeImplementation, SymbolEqualityComparer.Default))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -88,22 +88,34 @@ namespace {GenerateInterfaceAttributeNameSpace}
         _ = builder.AppendLine("{");
         foreach (var outputEvent in interfaceInfo.Events)
         {
-            _ = builder.AppendLine($"    {outputEvent.ToEventString()}");
+            var codeString = outputEvent.ToEventString();
+            AppendCodeLines(builder, codeString);
         }
 
         foreach (var property in interfaceInfo.Properties)
         {
-            _ = builder.AppendLine($"    {property.ToPropertyString()}");
+            var codeString = property.ToPropertyString();
+            AppendCodeLines(builder, codeString);
         }
 
         foreach (var method in interfaceInfo.Methods)
         {
-            _ = builder.AppendLine($"    {method.ToMethodString()}");
+            var codeString = method.ToMethodString();
+            AppendCodeLines(builder, codeString);
         }
 
         _ = builder.AppendLine("}");
 
         return builder.ToString();
+    }
+
+    private static void AppendCodeLines(StringBuilder builder, string code)
+    {
+        var codeLines = code.Split('\n');
+        foreach (var line in codeLines)
+        {
+            _ = builder.AppendLine($"    {line.Trim()}");
+        }
     }
 
     private static bool ShouldEnableNullableReferences(in InterfaceToGenerateInfo interfaceInfo)

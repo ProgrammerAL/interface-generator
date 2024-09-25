@@ -118,20 +118,77 @@ public class MethodsTests
         await TestHelper.VerifyAsync(source, SnapshotsDirectory);
     }
 
-    //[Fact]
-    //public async Task NoMethods_AssertResults()
-    //{
-    //    var source = """
-    //        using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
-    //        namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.SampleClasses;
+    [Fact]
+    public async Task MethodHasComments_AssertCommentsInInterface()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
-    //        [GenerateInterfaceAttribute]
-    //        public class MyClass : IMyClass
-    //        {
-    //        }
-    //        """;
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass
+            {
+                /// <summary>
+                /// This is my GenerateString1 method block comment
+                /// </summary>
+                /// <returns>It's void so it doesn't return anything</returns>
+                public void GenerateString1(int arg1, string arg2, string? arg3, float arg4, double arg5, int? arg6)
+                    => Console.WriteLine($"{arg1} {arg2} {arg3} {arg4} {arg5} {arg6}");
+            
+                /// This is my single-line triple comment that will appear in the interface
+                public string GenerateString2(int arg1, string arg2, string? arg3, float arg4, double arg5, int? arg6)
+                    => $"{arg1} {arg2} {arg3} {arg4} {arg5} {arg6}";
 
-    //    await TestHelper.VerifyAsync(source, "Snapshots/Methods");
-    //}
+                //This is my single-line comment that will not appear in the interface
+                public string GenerateString3(int arg1, string arg2, string? arg3, float arg4, double arg5, int? arg6)
+                    => $"{arg1} {arg2} {arg3} {arg4} {arg5} {arg6}";
+
+                public string GenerateString4(int arg1, string arg2, string? arg3, float arg4, double arg5, int? arg6)
+                    => $"{arg1} {arg2} {arg3} {arg4} {arg5} {arg6}";
+                        }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task ImplementsIDisposable_AssertMethodNotInGeneratedInterface()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass, System.IDisposable
+            {
+                public void GenerateString1(int arg1, string arg2, string? arg3, float arg4, double arg5, int? arg6)
+                    => Console.WriteLine($"{arg1} {arg2} {arg3} {arg4} {arg5} {arg6}");
+
+                public void Dispose(){}            
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task ImplementsInterfaceMethod_AssertMethodNotInGeneratedInterface()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass, System.IDisposable
+            {
+                public void GenerateString1(int arg1, string arg2, string? arg3, float arg4, double arg5, int? arg6)
+                    => Console.WriteLine($"{arg1} {arg2} {arg3} {arg4} {arg5} {arg6}");
+
+                public void Dispose(){}            
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
 }
 #pragma warning restore IDE0058 // Expression value is never used

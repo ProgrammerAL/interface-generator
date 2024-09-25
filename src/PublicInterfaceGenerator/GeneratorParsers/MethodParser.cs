@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
+using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Text;
 
 namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.GeneratorParsers;
 
@@ -16,7 +18,9 @@ public static class MethodParser
             return null;
         }
 
-        string? methodName = symbol!.Name;
+        var methodComments = CommentsBlockParser.ParseCommentsBlock(symbol);
+
+        string? methodName = symbol.Name;
         string returnType;
         if (symbol.ReturnsVoid)
         {
@@ -39,7 +43,7 @@ public static class MethodParser
             argumentBuilder.Add(interfaceArgument);
         }
 
-        return new InterfaceToGenerateInfo.Method(methodName, returnType, argumentBuilder.ToImmutableArray());
+        return new InterfaceToGenerateInfo.Method(methodName, returnType, argumentBuilder.ToImmutableArray(), methodComments);
     }
 
     private static bool IsSymbolValid(IMethodSymbol symbol)
@@ -78,7 +82,33 @@ public static class MethodParser
             //Don't include methods that have the [IgnoreInGeneratedInterface] attribute
             return false;
         }
+        else if (IsMethodFromInheritedInterface(symbol))
+        {
+            //If the method exists because of an interface it's implementing
+            //  don't include it in the interface we generate
+            return false;
+        }
 
         return true;
+    }
+
+    private static bool IsMethodFromInheritedInterface(IMethodSymbol symbol)
+    {
+        var interfaces = symbol.ContainingType.AllInterfaces;
+
+        foreach (var implementedInterface in interfaces)
+        {
+            var interfaceMethods = implementedInterface.GetMembers().OfType<IMethodSymbol>();
+            foreach (var interfaceMethod in interfaceMethods)
+            {
+                var containingTypeImplementation = symbol.ContainingType.FindImplementationForInterfaceMember(interfaceMethod);
+                if (symbol.Equals(containingTypeImplementation, SymbolEqualityComparer.Default))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

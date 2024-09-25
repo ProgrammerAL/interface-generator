@@ -16,10 +16,11 @@ public static class EventParser
             return null;
         }
 
-        string? name = symbol!.Name;
+        var comments = CommentsBlockParser.ParseCommentsBlock(symbol);
+        string? name = symbol.Name;
         string dataType = symbol.Type.ToDisplayString();
 
-        return new InterfaceToGenerateInfo.Event(name, dataType);
+        return new InterfaceToGenerateInfo.Event(name, dataType, comments);
     }
 
     private static bool IsSymbolValid(IEventSymbol symbol)
@@ -39,7 +40,33 @@ public static class EventParser
             //Don't include methods that have the [IgnoreInGeneratedInterface] attribute
             return false;
         }
+        else if (IsEventFromInheritedInterface(symbol))
+        {
+            //If the event exists because of an interface it's implementing
+            //  don't include it in the interface we generate
+            return false;
+        }
 
         return true;
+    }
+
+    private static bool IsEventFromInheritedInterface(IEventSymbol symbol)
+    {
+        var interfaces = symbol.ContainingType.AllInterfaces;
+
+        foreach (var implementedInterface in interfaces)
+        {
+            var interfaceEvents = implementedInterface.GetMembers().OfType<IEventSymbol>();
+            foreach (var interfaceEvent in interfaceEvents)
+            {
+                var containingTypeImplementation = symbol.ContainingType.FindImplementationForInterfaceMember(interfaceEvent);
+                if (symbol.Equals(containingTypeImplementation, SymbolEqualityComparer.Default))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

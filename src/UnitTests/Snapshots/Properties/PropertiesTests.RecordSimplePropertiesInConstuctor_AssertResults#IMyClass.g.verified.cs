@@ -11,7 +11,6 @@ public interface IMyClass
     int GetHashCode();
     bool Equals(object? obj);
     bool Equals(IMyClass? other);
-    bool Equals(ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses.MyClass? other);
     ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses.MyClass <Clone>$();
     void Deconstruct(string FirstName, string? MiddleName, string LastName);
 }

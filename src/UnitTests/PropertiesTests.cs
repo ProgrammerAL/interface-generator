@@ -176,5 +176,65 @@ public class PropertiesTests
 
         await TestHelper.VerifyAsync(source, SnapshotsDirectory);
     }
+
+    [Fact]
+    public async Task PropertiesWithComments_AssertCommentsInGeneratedInterface()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass
+            {
+                /// <summary>
+                /// This is my FirstName block comment
+                /// </summary>
+                public string? FirstName { get; set; }
+
+                /// This is my single line triple comment that will appear in the generated interface
+                public string? MiddleName { get; set; }
+
+                //This is my single line comment that will not appear in the generated interface
+                public required string LastName { get; set; }
+
+                public required string Address { get; set; }
+             }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task PropertiesFromInheritedInterface_AssertNotInGeneratedInterface()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            public interface IMyInterface
+            {
+                string PublicGetAndSet { get; set; }
+                string PublicGet1 { get; }
+                string PublicGet2 { get; }
+                string PublicSet1 { set; }
+                string PublicSet2 { set; }
+            }
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass, IMyInterface
+            {
+                public string PublicGetAndSet { get; set; }
+                public string PublicGet1 { get; }
+                public string PublicGet2 { get; set; }
+                public string PublicSet1 { set; }
+                public string PublicSet2 { get; set; }
+
+                public string Tag1 { get; set; }
+             }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
 }
 #pragma warning restore IDE0058 // Expression value is never used
