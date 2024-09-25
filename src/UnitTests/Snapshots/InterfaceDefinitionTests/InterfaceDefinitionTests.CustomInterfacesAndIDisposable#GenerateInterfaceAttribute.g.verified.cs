@@ -3,7 +3,7 @@
 #nullable enable
 namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes
 {
-    [System.AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    [System.AttributeUsage(System.AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public class GenerateInterfaceAttribute : System.Attribute
     {
         /// <summary>
@@ -31,7 +31,7 @@ namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes
         public bool IsIDisposable { get; set; } = false;
     }
 
-    [System.AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event, Inherited = false, AllowMultiple = false)]
+    [System.AttributeUsage(System.AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event, Inherited = false, AllowMultiple = false)]
     public class ExcludeFromGeneratedInterfaceAttribute : System.Attribute
     {
     }
