@@ -69,19 +69,7 @@ namespace {GenerateInterfaceAttributeNameSpace}
             _ = builder.AppendLine($"#nullable enable");
         }
 
-        var interfaceDefinitionLine = $"public interface {interfaceInfo.InterfaceName}";
-        if (!string.IsNullOrWhiteSpace(interfaceInfo.Interfaces))
-        {
-            interfaceDefinitionLine += $" : {interfaceInfo.Interfaces}";
-            if (interfaceInfo.InheritsFromIDisposable)
-            {
-                interfaceDefinitionLine += ", System.IDisposable";
-            }
-        }
-        else if (interfaceInfo.InheritsFromIDisposable)
-        {
-            interfaceDefinitionLine += " : System.IDisposable";
-        }
+        var interfaceDefinitionLine = interfaceInfo.GenerateInterfaceDefinitionString();
 
         _ = builder.AppendLine($"namespace {interfaceInfo.FullNamespace};");
         _ = builder.AppendLine();

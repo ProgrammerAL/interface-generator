@@ -34,12 +34,7 @@ public static class MethodParser
             returnType = symbol.ReturnType.ToString();
         }
 
-        var genericParameters = symbol.TypeParameters
-            .Select(x =>
-            {
-                var constraintTypes = string.Join(", ", x.ConstraintTypes.Select(x => x.Name));
-                return new InterfaceToGenerateInfo.MethodGenericParameter(x.Ordinal, x.Name, x.NullableAnnotation, constraintTypes);
-            }).ToImmutableArray();
+        var genericParameters = GenericsParser.ParseGenericParameters(symbol.TypeParameters);
 
         var argumentBuilder = ImmutableArray.CreateBuilder<InterfaceToGenerateInfo.MethodArgument>();
 
@@ -48,13 +43,13 @@ public static class MethodParser
             var argName = methodParameter.Name;
             var dataType = methodParameter.Type.ToDisplayString();
             var nullableAnnotation = methodParameter.NullableAnnotation;
-
             var interfaceArgument = new InterfaceToGenerateInfo.MethodArgument(argName, dataType, nullableAnnotation);
             argumentBuilder.Add(interfaceArgument);
         }
 
         return new InterfaceToGenerateInfo.Method(methodName, returnType, argumentBuilder.ToImmutableArray(), genericParameters, methodComments);
     }
+
 
     private static bool IsSymbolValid(IMethodSymbol symbol, string extraClassInterfaces, bool inheritsFromIDisposable)
     {

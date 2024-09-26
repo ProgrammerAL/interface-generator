@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
-using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
 
@@ -15,10 +14,65 @@ public record InterfaceToGenerateInfo(
     string FullNamespace,
     string Interfaces,
     bool InheritsFromIDisposable,
+    ImmutableArray<GenericParameter> GenericParameters,
     ImmutableArray<Method> Methods,
     ImmutableArray<Property> Properties,
     ImmutableArray<Event> Events)
 {
+    public string GenerateInterfaceDefinitionString()
+    {
+        var builder = new StringBuilder();
+
+        _ = builder.Append($"public interface {InterfaceName}");
+
+        if (GenericParameters.Any())
+        {
+            _ = builder.Append('<');
+
+            for (int i = 0; i < GenericParameters.Length; i++)
+            {
+                var parameter = GenericParameters[i];
+                _ = builder.Append(parameter.Name);
+                if (parameter.NullableAnnotation == NullableAnnotation.Annotated)
+                {
+                    _ = builder.Append('?');
+                }
+
+                //If there are more generic parameters, add a comma to separate items in the list
+                if (i + 1 < GenericParameters.Length)
+                {
+                    _ = builder.Append($", ");
+                }
+            }
+
+            _ = builder.Append('>');
+        }
+
+        if (!string.IsNullOrWhiteSpace(Interfaces))
+        {
+            _ = builder.Append($" : {Interfaces}");
+            if (InheritsFromIDisposable)
+            {
+                _ = builder.Append(", System.IDisposable");
+            }
+        }
+        else if (InheritsFromIDisposable)
+        {
+            _ = builder.Append(" : System.IDisposable");
+        }
+
+        foreach (var genericParam in GenericParameters)
+        {
+            if (!string.IsNullOrWhiteSpace(genericParam.ConstraintTypes))
+            {
+                _ = builder.Append($" where {genericParam.Name} : {genericParam.ConstraintTypes}");
+            }
+        }
+        return builder.ToString();
+    }
+
+    public record GenericParameter(int Ordinal, string Name, NullableAnnotation NullableAnnotation, string ConstraintTypes);
+
     internal static string CombineLineWithComments(string comments, string definitionLine)
     {
         if (string.IsNullOrWhiteSpace(comments))
@@ -31,7 +85,7 @@ public record InterfaceToGenerateInfo(
         }
     }
 
-    public record Method(string Name, string ReturnType, ImmutableArray<MethodArgument> Arguments, ImmutableArray<MethodGenericParameter> MethodGenericParameters, string Comments)
+    public record Method(string Name, string ReturnType, ImmutableArray<MethodArgument> Arguments, ImmutableArray<GenericParameter> GenericParameters, string Comments)
     {
         public string ToMethodString()
         {
@@ -39,23 +93,23 @@ public record InterfaceToGenerateInfo(
 
             _ = builder.Append($"{ReturnType} {Name}");
 
-            if (MethodGenericParameters.Any())
+            if (GenericParameters.Any())
             {
                 _ = builder.Append('<');
 
-                for (int i = 0; i < MethodGenericParameters.Length; i++)
-                { 
-                    var parameter = MethodGenericParameters[i];
+                for (int i = 0; i < GenericParameters.Length; i++)
+                {
+                    var parameter = GenericParameters[i];
                     _ = builder.Append(parameter.Name);
                     if (parameter.NullableAnnotation == NullableAnnotation.Annotated)
-                    { 
+                    {
                         _ = builder.Append('?');
                     }
 
                     //If there are more generic parameters, add a comma to separate items in the list
-                    if (i + 1 < MethodGenericParameters.Length)
-                    { 
-                       _ = builder.Append($", ");
+                    if (i + 1 < GenericParameters.Length)
+                    {
+                        _ = builder.Append($", ");
                     }
                 }
 
@@ -64,7 +118,7 @@ public record InterfaceToGenerateInfo(
 
             _ = builder.Append($"({string.Join(", ", Arguments.Select(a => a.ToArgumentString()))})");
 
-            foreach (var genericParam in MethodGenericParameters)
+            foreach (var genericParam in GenericParameters)
             {
                 if (!string.IsNullOrWhiteSpace(genericParam.ConstraintTypes))
                 {
@@ -84,14 +138,6 @@ public record InterfaceToGenerateInfo(
         public string ToArgumentString()
         {
             return $"{DataType} {Name}";
-        }
-    }
-
-    public record MethodGenericParameter(int Ordinal, string Name, NullableAnnotation NullableAnnotation, string ConstraintTypes)
-    {
-        public string ToTypeParameter()
-        {
-            return $"";
         }
     }
 

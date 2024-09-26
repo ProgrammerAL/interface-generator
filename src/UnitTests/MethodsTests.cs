@@ -264,22 +264,14 @@ public class MethodsTests
         await TestHelper.VerifyAsync(source, SnapshotsDirectory);
     }
 
-    public class MyClass
-    {
-        public string MyMehod<T, U>(T ar, U asd)
-            where T : class
-            where U : struct
-        {
-            return "";
-        }
-    }
-
     [Fact]
     public async Task WhenMethodHasMultipleGenericTypesWithTypeConstraints_AssertGenericTypesInInterface()
     {
         var source = """
             using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
             namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            public class MyBaseClass { }
 
             [GenerateInterfaceAttribute]
             public class MyClass : IMyClass
@@ -295,6 +287,26 @@ public class MethodsTests
             
                 public U? GenerateString3<T, U, V>(T arg1, U? arg2, V arg3)
                     where U : struct
+                    => arg2;
+            
+                public U? GenerateString4<T, U, V>(T arg1, U? arg2, V arg3)
+                    where U : new()
+                    => arg2;
+            
+                public U? GenerateString5<T, U, V>(T arg1, U? arg2, V arg3)
+                    where U : unmanaged
+                    => arg2;
+            
+                public U? GenerateString6<T, U, V>(T arg1, U? arg2, V arg3)
+                    where U : class?
+                    => arg2;
+            
+                public U? GenerateString7<T, U, V>(T arg1, U? arg2, V arg3)
+                    where U : MyBaseClass
+                    => arg2;
+
+                public U? GenerateString8<T, U, V>(T arg1, U? arg2, V arg3)
+                    where U : MyBaseClass?
                     => arg2;
             }
             """;

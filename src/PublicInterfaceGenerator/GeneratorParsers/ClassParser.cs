@@ -72,6 +72,8 @@ public static class ClassParser
         var nameSpace = namespaceName ?? (symbol.ContainingNamespace.IsGlobalNamespace ? string.Empty : symbol.ContainingNamespace.ToString());
         var extraInterfaces = interfacesNames?.Trim() ?? string.Empty;
 
+        var interfaceGenericParameters = GenericsParser.ParseGenericParameters(symbol.TypeParameters);
+
         var methodsBuilder = ImmutableArray.CreateBuilder<InterfaceToGenerateInfo.Method>();
         var propertiesBuilder = ImmutableArray.CreateBuilder<InterfaceToGenerateInfo.Property>();
         var eventsBuilder = ImmutableArray.CreateBuilder<InterfaceToGenerateInfo.Event>();
@@ -111,6 +113,7 @@ public static class ClassParser
             FullNamespace: nameSpace,
             Interfaces: extraInterfaces,
             InheritsFromIDisposable: inheritsFromIDisposable,
+            GenericParameters: interfaceGenericParameters,
             Methods: methodsBuilder.ToImmutableArray(),
             Properties: propertiesBuilder.ToImmutableArray(),
             Events: eventsBuilder.ToImmutableArray());

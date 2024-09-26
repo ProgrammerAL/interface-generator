@@ -1,5 +1,7 @@
 #pragma warning disable IDE0058 // Expression value is never used
 
+using static UnitTests.InterfaceDefinitionTests;
+
 namespace UnitTests;
 
 public class InterfaceDefinitionTests
@@ -95,6 +97,74 @@ public class InterfaceDefinitionTests
 
             [GenerateInterfaceAttribute(IsIDisposable = true)]
             public class MyClass : IMyClass
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task GenericClass()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass<T> : IMyClass<T>
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task GenericClassWithTypeConstraints_Class()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass<T> : IMyClass<T> where T : class
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task GenericClassWithTypeConstraints_BaseClass()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            public class MyBase { }
+            
+            [GenerateInterfaceAttribute]
+            public class MyClass<T> : IMyClass<T> where T : MyBase
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task GenericClassWithTypeConstraints_EmptyConstructor()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            public class MyBase { }
+            
+            [GenerateInterfaceAttribute]
+            public class MyClass<T> : IMyClass<T> where T : new()
             {
             }
             """;
