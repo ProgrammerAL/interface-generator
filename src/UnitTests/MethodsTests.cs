@@ -1,5 +1,9 @@
 #pragma warning disable IDE0058 // Expression value is never used
 
+using System.Net.Http.Headers;
+
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 namespace UnitTests;
 
 public class MethodsTests
@@ -206,6 +210,92 @@ public class MethodsTests
                     => Console.WriteLine($"{arg1} {arg2} {arg3} {arg4} {arg5} {arg6}");
 
                 public void Dispose(){}            
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task WhenMethodHasGenericTypes_AssertGenericTypesInInterface()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass
+            {
+                public void GenerateString1<T>(T arg1, T? arg2)
+                    => Console.WriteLine($"{arg1} {arg2}");
+
+                public T GenerateString2<T>(T arg1, T? arg2)
+                    => arg1;
+            
+                public T? GenerateString3<T>(T arg1, T? arg2)
+                    => arg2;
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task WhenMethodHasMultipleGenericTypes_AssertGenericTypesInInterface()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass
+            {
+                public void GenerateString1<T, U, V>(T arg1, U? arg2, V arg3)
+                    => Console.WriteLine($"{arg1} {arg2} {arg3}");
+
+                public T GenerateString2<T, U, V>(T arg1, U? arg2, V arg3)
+                    => arg1;
+            
+                public U? GenerateString3<T, U, V>(T arg1, U? arg2, V arg3)
+                    => arg2;
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    public class MyClass
+    {
+        public string MyMehod<T, U>(T ar, U asd)
+            where T : class
+            where U : struct
+        {
+            return "";
+        }
+    }
+
+    [Fact]
+    public async Task WhenMethodHasMultipleGenericTypesWithTypeConstraints_AssertGenericTypesInInterface()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass
+            {
+                public void GenerateString1<T, U, V>(T arg1, U? arg2, V arg3)
+                    where T : class
+                    where U : struct
+                    => Console.WriteLine($"{arg1} {arg2} {arg3}");
+
+                public T GenerateString2<T, U, V>(T arg1, U? arg2, V arg3)
+                    where T : class
+                    => arg1;
+            
+                public U? GenerateString3<T, U, V>(T arg1, U? arg2, V arg3)
+                    where U : struct
+                    => arg2;
             }
             """;
 

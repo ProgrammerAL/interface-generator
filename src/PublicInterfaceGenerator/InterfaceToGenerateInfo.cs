@@ -31,20 +31,67 @@ public record InterfaceToGenerateInfo(
         }
     }
 
-    public record Method(string Name, string ReturnType, ImmutableArray<Argument> Arguments, string Comments)
+    public record Method(string Name, string ReturnType, ImmutableArray<MethodArgument> Arguments, ImmutableArray<MethodGenericParameter> MethodGenericParameters, string Comments)
     {
         public string ToMethodString()
         {
-            var definitionLine = $"{ReturnType} {Name}({string.Join(", ", Arguments.Select(a => a.ToArgumentString()))});";
+            var builder = new StringBuilder();
+
+            _ = builder.Append($"{ReturnType} {Name}");
+
+            if (MethodGenericParameters.Any())
+            {
+                _ = builder.Append('<');
+
+                for (int i = 0; i < MethodGenericParameters.Length; i++)
+                { 
+                    var parameter = MethodGenericParameters[i];
+                    _ = builder.Append(parameter.Name);
+                    if (parameter.NullableAnnotation == NullableAnnotation.Annotated)
+                    { 
+                        _ = builder.Append('?');
+                    }
+
+                    //If there are more generic parameters, add a comma to separate items in the list
+                    if (i + 1 < MethodGenericParameters.Length)
+                    { 
+                       _ = builder.Append($", ");
+                    }
+                }
+
+                _ = builder.Append('>');
+            }
+
+            _ = builder.Append($"({string.Join(", ", Arguments.Select(a => a.ToArgumentString()))})");
+
+            foreach (var genericParam in MethodGenericParameters)
+            {
+                if (!string.IsNullOrWhiteSpace(genericParam.ConstraintTypes))
+                {
+                    _ = builder.Append($" where {genericParam.Name} : {genericParam.ConstraintTypes}");
+                }
+            }
+
+            _ = builder.Append(';');
+
+            var definitionLine = builder.ToString();
             return InterfaceToGenerateInfo.CombineLineWithComments(Comments, definitionLine);
         }
     }
 
-    public record Argument(string Name, string DataType, NullableAnnotation NullableAnnotation)
+    public record MethodArgument(string Name, string DataType, NullableAnnotation NullableAnnotation)
     {
         public string ToArgumentString()
         {
             return $"{DataType} {Name}";
+        }
+    }
+
+    public record MethodGenericParameter(int Ordinal, string Name, NullableAnnotation NullableAnnotation, string ConstraintTypes)
+    {
+        public string ToTypeParameter()
+        {
+            return $"";
         }
     }
 
