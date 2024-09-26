@@ -14,10 +14,6 @@ public class InterfaceSourceGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        // Add the marker attribute
-        context.RegisterPostInitializationOutput(static ctx => ctx.AddSource(
-            $"{SourceGenerationHelper.GenerateInterfaceAttributeName}.g.cs", SourceText.From(SourceGenerationHelper.AttributeClassCode, Encoding.UTF8)));
-
         IncrementalValuesProvider<InterfaceToGenerateInfo?> interfacesToGenerate =
             context.SyntaxProvider
             .ForAttributeWithMetadataName(

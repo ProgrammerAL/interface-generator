@@ -18,6 +18,8 @@
 
 	<PropertyGroup>
 		<Version>0.1.0</Version>
+		<!--Mark the nuget as a dev dependency, so any projects using this nuget don't auto pull in this project-->
+		<DevelopmentDependency>true</DevelopmentDependency>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -25,9 +27,19 @@
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" PrivateAssets="all" />
 	</ItemGroup>
 
-	<!-- Package the generator in the analyzer directory of the nuget package -->
 	<ItemGroup>
+		<!-- Package the generator in the analyzer directory of the nuget package -->
 		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+
+	    <!-- Pack the attributes dll in the analyzers/dotnet/cs path -->
+	    <None Include="$(OutputPath)\PublicInterfaceGenerator.Attributes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+
+		<!-- Pack the attributes dll in the lib\netstandard2.0 path -->
+	    <None Include="$(OutputPath)\PublicInterfaceGenerator.Attributes.dll" Pack="true" PackagePath="lib\netstandard2.0" Visible="true" />
+
 		<None Include="../../README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\PublicInterfaceGenerator.Attributes\PublicInterfaceGenerator.Attributes.csproj" />
 	</ItemGroup>
 </Project>
