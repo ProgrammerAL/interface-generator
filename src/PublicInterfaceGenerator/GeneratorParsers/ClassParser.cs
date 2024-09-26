@@ -70,6 +70,7 @@ public static class ClassParser
     {
         var interfaceName = customInterfaceName ?? $"I{symbol.Name}";
         var nameSpace = namespaceName ?? (symbol.ContainingNamespace.IsGlobalNamespace ? string.Empty : symbol.ContainingNamespace.ToString());
+        var extraInterfaces = interfacesNames?.Trim() ?? string.Empty;
 
         var methodsBuilder = ImmutableArray.CreateBuilder<InterfaceToGenerateInfo.Method>();
         var propertiesBuilder = ImmutableArray.CreateBuilder<InterfaceToGenerateInfo.Property>();
@@ -80,7 +81,7 @@ public static class ClassParser
         {
             if (member is IMethodSymbol memberSymbol)
             {
-                var method = MethodParser.ExtractMethod(memberSymbol);
+                var method = MethodParser.ExtractMethod(memberSymbol, extraInterfaces, inheritsFromIDisposable);
                 if (method is object)
                 {
                     methodsBuilder.Add(method);
@@ -108,7 +109,7 @@ public static class ClassParser
             InterfaceName: interfaceName,
             ClassName: symbol.Name,
             FullNamespace: nameSpace,
-            Interfaces: interfacesNames ?? "",
+            Interfaces: extraInterfaces,
             InheritsFromIDisposable: inheritsFromIDisposable,
             Methods: methodsBuilder.ToImmutableArray(),
             Properties: propertiesBuilder.ToImmutableArray(),

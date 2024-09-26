@@ -11,9 +11,12 @@ namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.GeneratorParser
 
 public static class MethodParser
 {
-    public static InterfaceToGenerateInfo.Method? ExtractMethod(IMethodSymbol symbol)
+    public static InterfaceToGenerateInfo.Method? ExtractMethod(
+        IMethodSymbol symbol,
+        string extraClassInterfaces,
+        bool inheritsFromIDisposable)
     {
-        if (!IsSymbolValid(symbol))
+        if (!IsSymbolValid(symbol, extraClassInterfaces, inheritsFromIDisposable))
         {
             return null;
         }
@@ -46,7 +49,7 @@ public static class MethodParser
         return new InterfaceToGenerateInfo.Method(methodName, returnType, argumentBuilder.ToImmutableArray(), methodComments);
     }
 
-    private static bool IsSymbolValid(IMethodSymbol symbol)
+    private static bool IsSymbolValid(IMethodSymbol symbol, string extraClassInterfaces, bool inheritsFromIDisposable)
     {
         if (string.Equals(".ctor", symbol.Name, StringComparison.Ordinal))
         {
@@ -87,6 +90,41 @@ public static class MethodParser
             //If the method exists because of an interface it's implementing
             //  don't include it in the interface we generate
             return false;
+        }
+        else if (IsDisposeMethodAndImplementsIDisposable(symbol, extraClassInterfaces, inheritsFromIDisposable))
+        {
+            //If the code uses an attribute to set that the class implements IDisposable
+            //  and this is the Dispose() method, don't include it in the interface
+            //  Note: This is different from the method check above, because the concrete class won't have IDisposable in the definition list
+            return false;
+        }
+
+        return true;
+    }
+
+    private static bool IsDisposeMethodAndImplementsIDisposable(IMethodSymbol symbol, string extraClassInterfaces, bool inheritsFromIDisposable)
+    {
+        if (!symbol.Name.Equals("Dispose"))
+        {
+            return false;
+        }
+
+        if (!symbol.ReturnsVoid)
+        {
+            return false;
+        }
+
+        if (inheritsFromIDisposable)
+        {
+            return true;
+        }
+
+        var interfaces = extraClassInterfaces.
+                            Split([','], StringSplitOptions.RemoveEmptyEntries)
+                            .Select(x => x.Trim());
+        if (interfaces.Any(x => string.Equals(x, "System.IDisposable") || string.Equals(x, "IDisposable")))
+        {
+            return true;
         }
 
         return true;

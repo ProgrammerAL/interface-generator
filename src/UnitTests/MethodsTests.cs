@@ -172,6 +172,27 @@ public class MethodsTests
     }
 
     [Fact]
+    public async Task IsIDisposiblePropertyTrue_AssertDisposeMethodNotInGeneratedInterface()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute(IsIDisposable = true)]
+            public class MyClass : IMyClass
+            {
+                public void GenerateString1(int arg1, string arg2, string? arg3, float arg4, double arg5, int? arg6)
+                    => Console.WriteLine($"{arg1} {arg2} {arg3} {arg4} {arg5} {arg6}");
+
+                public void Dispose(){}
+                public string Dispose(){ return ""; }
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
     public async Task ImplementsInterfaceMethod_AssertMethodNotInGeneratedInterface()
     {
         var source = """
