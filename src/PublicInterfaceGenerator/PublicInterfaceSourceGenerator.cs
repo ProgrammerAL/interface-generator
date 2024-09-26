@@ -1,26 +1,27 @@
-﻿using System.Collections.Immutable;
-using System.Text;
+﻿using System.Text;
 
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
+using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
 using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.GeneratorParsers;
 
 namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator;
 
 [Generator]
-public class InterfaceSourceGenerator : IIncrementalGenerator
+public class PublicInterfaceSourceGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        IncrementalValuesProvider<InterfaceToGenerateInfo?> interfacesToGenerate =
+        var interfacesToGenerate =
             context.SyntaxProvider
             .ForAttributeWithMetadataName(
-                SourceGenerationHelper.GenerateInterfaceAttributeFullName,
+                GenerateInterfaceAttribute.Constants.GenerateInterfaceAttributeFullName,
                 predicate: static (node, _) => node is ClassDeclarationSyntax or RecordDeclarationSyntax,
-                transform: ClassParser.GetTypeToGenerate)
-            .Where(static m => m is not null);
+                //predicate: static (node, _) => true,
+                transform: ClassParser.GetTypeToGenerate);
 
         // Generate source code for each interface
         context.RegisterSourceOutput(interfacesToGenerate,

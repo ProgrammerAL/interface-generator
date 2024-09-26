@@ -8,17 +8,6 @@ namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator;
 
 public static class SourceGenerationHelper
 {
-    public const string GenerateInterfaceAttributeName = "GenerateInterfaceAttribute";
-    public const string GenerateInterfaceAttributeNameSpace = "ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes";
-    public const string GenerateInterfaceAttributeFullName = $"{GenerateInterfaceAttributeNameSpace}.{GenerateInterfaceAttributeName}";
-
-    public const string ExcludeFromGeneratedInterfaceAttributeName = "ExcludeFromGeneratedInterfaceAttribute";
-
-    public const string AttributeProperty_InterfaceName = "InterfaceName";
-    public const string AttributeProperty_NamespaceName = "Namespace";
-    public const string AttributeProperty_Interfaces = "Interfaces";
-    public const string AttributeProperty_IsIDisposable = "IsIDisposable";
-
     public static string GenerateInterface(in InterfaceToGenerateInfo interfaceInfo)
     {
         var builder = new StringBuilder();
@@ -71,7 +60,5 @@ public static class SourceGenerationHelper
                                               || m.ReturnType.EndsWith("?"))
             || interfaceInfo.Properties.Any(x => x.ReturnType.EndsWith("?"))
             || interfaceInfo.Events.Any(x => x.EventDataType.EndsWith("?"));
-
-
     }
 }

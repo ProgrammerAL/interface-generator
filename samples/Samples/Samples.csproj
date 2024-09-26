@@ -6,9 +6,19 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\src\PublicInterfaceGenerator.Attributes\PublicInterfaceGenerator.Attributes.csproj" />
+<!--	<ItemGroup>
 		<ProjectReference Include="..\..\src\PublicInterfaceGenerator\PublicInterfaceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-	</ItemGroup>
+		<ProjectReference Include="..\..\src\PublicInterfaceGenerator.Attributes\PublicInterfaceGenerator.Attributes.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+	</ItemGroup>-->
+
+  <!--When compiling, generate the nuget so this unit tests project references that instead of the project directly--> 
+    <Target Name="CreateNuget" BeforeTargets="CoreCompile">
+        <Exec Command="dotnet pack ../../src/PublicInterfaceGenerator/PublicInterfaceGenerator.csproj --configuration Debug" />
+    </Target>
+
+    <ItemGroup>
+      <!--Reference the nuget we generate so we test that like a normal user-->
+      <PackageReference Include="ProgrammerAl.SourceGenerators.PublicInterfaceGenerator" Version="*" PrivateAssets="All" />
+    </ItemGroup>
 
 </Project>

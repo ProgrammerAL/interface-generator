@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -29,12 +29,28 @@
     </PackageReference>
   </ItemGroup>
 
+<!--  <ItemGroup>
+    <ProjectReference Include="..\PublicInterfaceGenerator.Attributes\PublicInterfaceGenerator.Attributes.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+    <ProjectReference Include="..\PublicInterfaceGenerator\PublicInterfaceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+  </ItemGroup>
+
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PublicInterfaceGenerator\PublicInterfaceGenerator.csproj" />
-  </ItemGroup>
+  <!--When compiling, generate the nuget so this unit tests project references that instead of the project directly--> 
+    <Target Name="CreateNuget" BeforeTargets="CoreCompile">
+        <Exec Command="dotnet pack ../PublicInterfaceGenerator/PublicInterfaceGenerator.csproj --configuration Debug" />
+    </Target>
 
+    <ItemGroup>
+      <!--Reference the nuget we generate so we test that like a normal user-->
+      <PackageReference Include="ProgrammerAl.SourceGenerators.PublicInterfaceGenerator" Version="*" PrivateAssets="All" />
+  
+      <!--Still have to refrence the source generator project because the unit tests need to reference the source generator class-->
+      <ProjectReference Include="..\PublicInterfaceGenerator\PublicInterfaceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+    </ItemGroup>
 </Project>

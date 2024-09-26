@@ -30,4 +30,18 @@ public class GenerateInterfaceAttribute : Attribute
     /// If you are also specifying interfaces with the ""{AttributeProperty_Interfaces}"" property, either set this to false and include ""System.IDisposable"" in the ""{AttributeProperty_Interfaces}"" property string, or set this to true and don't include ""System.IDisposable"" in the ""{AttributeProperty_Interfaces}"" property string.
     /// </summary>
     public bool IsIDisposable { get; set; }
+
+    public static class Constants
+    {
+        public const string GenerateInterfaceAttributeName = nameof(GenerateInterfaceAttribute);
+        public static string GenerateInterfaceAttributeNameSpace = typeof(GenerateInterfaceAttribute).Namespace;
+        public static string GenerateInterfaceAttributeFullName = typeof(GenerateInterfaceAttribute).FullName;
+
+        public const string ExcludeFromGeneratedInterfaceAttributeName = "ExcludeFromGeneratedInterfaceAttribute";
+
+        public const string AttributeProperty_InterfaceName = nameof(InterfaceName);
+        public const string AttributeProperty_NamespaceName = nameof(Namespace);
+        public const string AttributeProperty_Interfaces = nameof(Interfaces);
+        public const string AttributeProperty_IsIDisposable = nameof(IsIDisposable);
+    }
 }

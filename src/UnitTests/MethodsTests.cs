@@ -1,9 +1,5 @@
 #pragma warning disable IDE0058 // Expression value is never used
 
-using System.Net.Http.Headers;
-
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
 namespace UnitTests;
 
 public class MethodsTests
