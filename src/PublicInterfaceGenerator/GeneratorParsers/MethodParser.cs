@@ -95,7 +95,7 @@ public static class MethodParser
         {
             //If the code uses an attribute to set that the class implements IDisposable
             //  and this is the Dispose() method, don't include it in the interface
-            //  Note: This is different from the method check above, because the concrete class won't have IDisposable in the definition list
+            //  Note: This is different from the method check above, because the concrete class won't have IDisposable in the definition list, it's on the interface
             return false;
         }
 
