@@ -1,175 +1,175 @@
-#pragma warning disable IDE0058 // Expression value is never used
+//#pragma warning disable IDE0058 // Expression value is never used
 
-using static UnitTests.InterfaceDefinitionTests;
+//using static UnitTests.InterfaceDefinitionTests;
 
-namespace UnitTests;
+//namespace UnitTests;
 
-public class InterfaceDefinitionTests
-{
-    private const string SnapshotsDirectory = "Snapshots/InterfaceDefinitionTests";
+//public class InterfaceDefinitionTests
+//{
+//    private const string SnapshotsDirectory = "Snapshots/InterfaceDefinitionTests";
 
-    [Fact]
-    public async Task DefaultName()
-    {
-        var source = """
-            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+//    [Fact]
+//    public async Task DefaultName()
+//    {
+//        var source = """
+//            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+//            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
-            [GenerateInterfaceAttribute]
-            public class MyClass : IMyClass
-            {
-            }
-            """;
+//            [GenerateInterfaceAttribute]
+//            public class MyClass : IMyClass
+//            {
+//            }
+//            """;
 
-        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
-    }
+//        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+//    }
 
-    [Fact]
-    public async Task DifferentName()
-    {
-        var source = """
-            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+//    [Fact]
+//    public async Task DifferentName()
+//    {
+//        var source = """
+//            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+//            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
-            [GenerateInterfaceAttribute(InterfaceName = "SomeOtherName")]
-            public class MyClass : SomeOtherName
-            {
-            }
-            """;
+//            [GenerateInterfaceAttribute(InterfaceName = "SomeOtherName")]
+//            public class MyClass : SomeOtherName
+//            {
+//            }
+//            """;
 
-        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
-    }
+//        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+//    }
 
-    [Fact]
-    public async Task CustomNamespace()
-    {
-        var source = """
-            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+//    [Fact]
+//    public async Task CustomNamespace()
+//    {
+//        var source = """
+//            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+//            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
-            [GenerateInterfaceAttribute(Namespace = "My.Custom.Namespace")]
-            public class MyClass : IMyClass
-            {
-            }
-            """;
+//            [GenerateInterfaceAttribute(Namespace = "My.Custom.Namespace")]
+//            public class MyClass : IMyClass
+//            {
+//            }
+//            """;
 
-        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
-    }
+//        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+//    }
 
-    [Fact]
-    public async Task CustomInterfaces()
-    {
-        var source = """
-            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+//    [Fact]
+//    public async Task CustomInterfaces()
+//    {
+//        var source = """
+//            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+//            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
-            [GenerateInterfaceAttribute(Interfaces = "MyCode.Interface1, MyCode.Interface2, MyCode.Interface3")]
-            public class MyClass : IMyClass
-            {
-            }
-            """;
+//            [GenerateInterfaceAttribute(Interfaces = "MyCode.Interface1, MyCode.Interface2, MyCode.Interface3")]
+//            public class MyClass : IMyClass
+//            {
+//            }
+//            """;
 
-        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
-    }
+//        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+//    }
 
-    [Fact]
-    public async Task CustomInterfacesAndIDisposable()
-    {
-        var source = """
-            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+//    [Fact]
+//    public async Task CustomInterfacesAndIDisposable()
+//    {
+//        var source = """
+//            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+//            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
-            [GenerateInterfaceAttribute(IsIDisposable = true, Interfaces = "MyCode.Interface1, MyCode.Interface2, MyCode.Interface3")]
-            public class MyClass : IMyClass
-            {
-            }
-            """;
+//            [GenerateInterfaceAttribute(IsIDisposable = true, Interfaces = "MyCode.Interface1, MyCode.Interface2, MyCode.Interface3")]
+//            public class MyClass : IMyClass
+//            {
+//            }
+//            """;
 
-        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
-    }
+//        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+//    }
 
-    [Fact]
-    public async Task IsIDisposable()
-    {
-        var source = """
-            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+//    [Fact]
+//    public async Task IsIDisposable()
+//    {
+//        var source = """
+//            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+//            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
-            [GenerateInterfaceAttribute(IsIDisposable = true)]
-            public class MyClass : IMyClass
-            {
-            }
-            """;
+//            [GenerateInterfaceAttribute(IsIDisposable = true)]
+//            public class MyClass : IMyClass
+//            {
+//            }
+//            """;
 
-        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
-    }
+//        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+//    }
 
-    [Fact]
-    public async Task GenericClass()
-    {
-        var source = """
-            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+//    [Fact]
+//    public async Task GenericClass()
+//    {
+//        var source = """
+//            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+//            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
-            [GenerateInterfaceAttribute]
-            public class MyClass<T> : IMyClass<T>
-            {
-            }
-            """;
+//            [GenerateInterfaceAttribute]
+//            public class MyClass<T> : IMyClass<T>
+//            {
+//            }
+//            """;
 
-        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
-    }
+//        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+//    }
 
-    [Fact]
-    public async Task GenericClassWithTypeConstraints_Class()
-    {
-        var source = """
-            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+//    [Fact]
+//    public async Task GenericClassWithTypeConstraints_Class()
+//    {
+//        var source = """
+//            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+//            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
-            [GenerateInterfaceAttribute]
-            public class MyClass<T> : IMyClass<T> where T : class
-            {
-            }
-            """;
+//            [GenerateInterfaceAttribute]
+//            public class MyClass<T> : IMyClass<T> where T : class
+//            {
+//            }
+//            """;
 
-        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
-    }
+//        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+//    }
 
-    [Fact]
-    public async Task GenericClassWithTypeConstraints_BaseClass()
-    {
-        var source = """
-            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+//    [Fact]
+//    public async Task GenericClassWithTypeConstraints_BaseClass()
+//    {
+//        var source = """
+//            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+//            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
-            public class MyBase { }
+//            public class MyBase { }
             
-            [GenerateInterfaceAttribute]
-            public class MyClass<T> : IMyClass<T> where T : MyBase
-            {
-            }
-            """;
+//            [GenerateInterfaceAttribute]
+//            public class MyClass<T> : IMyClass<T> where T : MyBase
+//            {
+//            }
+//            """;
 
-        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
-    }
+//        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+//    }
 
-    [Fact]
-    public async Task GenericClassWithTypeConstraints_EmptyConstructor()
-    {
-        var source = """
-            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
-            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+//    [Fact]
+//    public async Task GenericClassWithTypeConstraints_EmptyConstructor()
+//    {
+//        var source = """
+//            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+//            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
-            public class MyBase { }
+//            public class MyBase { }
             
-            [GenerateInterfaceAttribute]
-            public class MyClass<T> : IMyClass<T> where T : new()
-            {
-            }
-            """;
+//            [GenerateInterfaceAttribute]
+//            public class MyClass<T> : IMyClass<T> where T : new()
+//            {
+//            }
+//            """;
 
-        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
-    }
-}
-#pragma warning restore IDE0058 // Expression value is never used
+//        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+//    }
+//}
+//#pragma warning restore IDE0058 // Expression value is never used

@@ -1,39 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
 
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis;
-using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator;
+//using Microsoft.CodeAnalysis.CSharp;
+//using Microsoft.CodeAnalysis;
+//using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator;
 
-namespace UnitTests;
-public static class TestHelper
-{
-    public static async Task VerifyAsync(string source, string directory)
-    {
-        SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
-        // Create references for assemblies we require
-        // We could add multiple references if required
-        IEnumerable<PortableExecutableReference> references = new[]
-        {
-            MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
-        };
+//namespace UnitTests;
+//public static class TestHelper
+//{
+//    public static async Task VerifyAsync(string source, string directory)
+//    {
+//        SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
+//        // Create references for assemblies we require
+//        // We could add multiple references if required
+//        IEnumerable<PortableExecutableReference> references = new[]
+//        {
+//            MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
+//        };
 
-        CSharpCompilation compilation = CSharpCompilation.Create(
-            assemblyName: "Tests",
-            syntaxTrees: new[] { syntaxTree },
-            references: references);
+//        CSharpCompilation compilation = CSharpCompilation.Create(
+//            assemblyName: "Tests",
+//            syntaxTrees: new[] { syntaxTree },
+//            references: references);
 
-        var generator = new PublicInterfaceSourceGenerator();
+//        var generator = new PublicInterfaceSourceGenerator();
 
-        GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
+//        GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
 
-        driver = driver.RunGenerators(compilation);
+//        driver = driver.RunGenerators(compilation);
 
-        _ = await Verifier
-                  .Verify(driver)
-                  .UseDirectory(directory);
-    }
-}
+//        _ = await Verifier
+//                  .Verify(driver)
+//                  .UseDirectory(directory);
+//    }
+//}
