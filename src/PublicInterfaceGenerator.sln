@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples", "..\samples\Sampl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A7E17D8D-F489-4CD6-85DA-03BEE1BDD217}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{F014C6CC-0A1E-4E2D-A9DC-8F3CFFF7D87A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{7235A503-C7CD-4028-88F4-15DBD7371471}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PublicInterfaceGenerator.Attributes", "PublicInterfaceGenerator.Attributes\PublicInterfaceGenerator.Attributes.csproj", "{59953E27-6190-44CE-9244-DBA1566811F5}"
@@ -29,10 +27,6 @@ Global
 		{7C1CFAC0-14C2-40B7-A257-7735DF5415A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C1CFAC0-14C2-40B7-A257-7735DF5415A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C1CFAC0-14C2-40B7-A257-7735DF5415A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F014C6CC-0A1E-4E2D-A9DC-8F3CFFF7D87A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F014C6CC-0A1E-4E2D-A9DC-8F3CFFF7D87A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F014C6CC-0A1E-4E2D-A9DC-8F3CFFF7D87A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F014C6CC-0A1E-4E2D-A9DC-8F3CFFF7D87A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{59953E27-6190-44CE-9244-DBA1566811F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{59953E27-6190-44CE-9244-DBA1566811F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59953E27-6190-44CE-9244-DBA1566811F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -43,7 +37,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7C1CFAC0-14C2-40B7-A257-7735DF5415A9} = {7235A503-C7CD-4028-88F4-15DBD7371471}
-		{F014C6CC-0A1E-4E2D-A9DC-8F3CFFF7D87A} = {A7E17D8D-F489-4CD6-85DA-03BEE1BDD217}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1CC6B6F7-942B-4373-B782-4903EAE16A97}
