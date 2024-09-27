@@ -26,6 +26,7 @@ public static class ClassParser
         string? namespaceName = null;
         string? interfacesNames = null;
         bool inheritsFromIDisposable = false;
+        bool inheritsFromIAsyncDisposable = false;
 
         foreach (AttributeData attributeData in symbol.GetAttributes())
         {
@@ -62,17 +63,39 @@ public static class ClassParser
                         inheritsFromIDisposable = parsedIsIDisposable;
                     }
                 }
+                else if (namedArgument.Key == GenerateInterfaceAttribute.Constants.AttributeProperty_IsIAsyncDisposable
+                    && namedArgument.Value.Value?.ToString() is { } isIAsyncDisposable)
+                {
+                    if (bool.TryParse(isIAsyncDisposable, out bool parsedIsIAsyncDisposable))
+                    {
+                        inheritsFromIAsyncDisposable = parsedIsIAsyncDisposable;
+                    }
+                }
             }
         }
 
-        return TryExtractSymbols(symbol, interfaceName, namespaceName, interfacesNames, inheritsFromIDisposable);
+        return TryExtractSymbols(
+            symbol, 
+            interfaceName, 
+            namespaceName, 
+            interfacesNames, 
+            inheritsFromIDisposable,
+            inheritsFromIAsyncDisposable);
     }
 
-    private static InterfaceToGenerateInfo? TryExtractSymbols(INamedTypeSymbol symbol, string? customInterfaceName, string? namespaceName, string? interfacesNames, bool inheritsFromIDisposable)
+    private static InterfaceToGenerateInfo? TryExtractSymbols(
+        INamedTypeSymbol symbol, 
+        string? customInterfaceName, 
+        string? namespaceName, 
+        string? interfacesNames, 
+        bool inheritsFromIDisposable,
+        bool inheritsFromIAsyncDisposable)
     {
         var interfaceName = customInterfaceName ?? $"I{symbol.Name}";
         var nameSpace = namespaceName ?? (symbol.ContainingNamespace.IsGlobalNamespace ? string.Empty : symbol.ContainingNamespace.ToString());
         var extraInterfaces = interfacesNames?.Trim() ?? string.Empty;
+
+        var comments = CommentsBlockParser.ParseCommentsBlock(symbol);
 
         var interfaceGenericParameters = GenericsParser.ParseGenericParameters(symbol.TypeParameters);
 
@@ -85,7 +108,7 @@ public static class ClassParser
         {
             if (member is IMethodSymbol memberSymbol)
             {
-                var method = MethodParser.ExtractMethod(memberSymbol, extraInterfaces, inheritsFromIDisposable);
+                var method = MethodParser.ExtractMethod(memberSymbol, extraInterfaces, inheritsFromIDisposable, inheritsFromIAsyncDisposable);
                 if (method is object)
                 {
                     methodsBuilder.Add(method);
@@ -115,7 +138,9 @@ public static class ClassParser
             FullNamespace: nameSpace,
             Interfaces: extraInterfaces,
             InheritsFromIDisposable: inheritsFromIDisposable,
+            InheritsFromIAsyncDisposable: inheritsFromIAsyncDisposable,
             GenericParameters: interfaceGenericParameters,
+            Comments: comments,
             Methods: methodsBuilder.ToImmutableArray(),
             Properties: propertiesBuilder.ToImmutableArray(),
             Events: eventsBuilder.ToImmutableArray());

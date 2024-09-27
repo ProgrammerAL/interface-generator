@@ -14,6 +14,8 @@ public record InterfaceToGenerateInfo(
     string FullNamespace,
     string Interfaces,
     bool InheritsFromIDisposable,
+    bool InheritsFromIAsyncDisposable,
+    string Comments,
     ImmutableArray<GenericParameter> GenericParameters,
     ImmutableArray<Method> Methods,
     ImmutableArray<Property> Properties,
@@ -48,17 +50,36 @@ public record InterfaceToGenerateInfo(
             _ = builder.Append('>');
         }
 
-        if (!string.IsNullOrWhiteSpace(Interfaces))
+        var hasStartedInterfaceList = false;
+        var hasInterfacesList = !string.IsNullOrWhiteSpace(Interfaces);
+
+        if (hasInterfacesList)
         {
-            _ = builder.Append($" : {Interfaces}");
+            AddInterfacesToLine(Interfaces, builder, hasStartedInterfaceList);
+            hasStartedInterfaceList = true;
+
             if (InheritsFromIDisposable)
             {
-                _ = builder.Append(", System.IDisposable");
+                AddInterfacesToLine("System.IDisposable", builder, hasStartedInterfaceList);
+            }
+
+            if (InheritsFromIAsyncDisposable)
+            {
+                AddInterfacesToLine("System.IAsyncDisposable", builder, hasStartedInterfaceList);
             }
         }
-        else if (InheritsFromIDisposable)
+        else
         {
-            _ = builder.Append(" : System.IDisposable");
+            if (InheritsFromIDisposable)
+            {
+                AddInterfacesToLine("System.IDisposable", builder, hasStartedInterfaceList);
+                hasStartedInterfaceList = true;
+            }
+
+            if (InheritsFromIAsyncDisposable)
+            {
+                AddInterfacesToLine("System.IAsyncDisposable", builder, hasStartedInterfaceList);
+            }
         }
 
         foreach (var genericParam in GenericParameters)
@@ -68,7 +89,20 @@ public record InterfaceToGenerateInfo(
                 _ = builder.Append($" where {genericParam.Name} : {genericParam.ConstraintTypes}");
             }
         }
-        return builder.ToString();
+
+        return InterfaceToGenerateInfo.CombineLineWithComments(Comments, builder);
+    }
+
+    private void AddInterfacesToLine(string interfaces, StringBuilder builder, bool hasStartedInterfaceList)
+    {
+        if (hasStartedInterfaceList)
+        {
+            _ = builder.Append($", {interfaces}");
+        }
+        else
+        {
+            _ = builder.Append($" : {interfaces}");
+        }
     }
 
     public record GenericParameter(int Ordinal, string Name, NullableAnnotation NullableAnnotation, string ConstraintTypes);
@@ -83,6 +117,11 @@ public record InterfaceToGenerateInfo(
         {
             return $"{comments}\n{definitionLine}";
         }
+    }
+
+    internal static string CombineLineWithComments(string comments, StringBuilder builder)
+    {
+        return CombineLineWithComments(comments, builder.ToString());
     }
 
     public record Method(string Name, string ReturnType, ImmutableArray<MethodArgument> Arguments, ImmutableArray<GenericParameter> GenericParameters, string Comments)
@@ -128,16 +167,33 @@ public record InterfaceToGenerateInfo(
 
             _ = builder.Append(';');
 
-            var definitionLine = builder.ToString();
-            return InterfaceToGenerateInfo.CombineLineWithComments(Comments, definitionLine);
+            return InterfaceToGenerateInfo.CombineLineWithComments(Comments, builder);
         }
     }
 
-    public record MethodArgument(string Name, string DataType, NullableAnnotation NullableAnnotation)
+    public record MethodArgument(string Name, NullableAnnotation NullableAnnotation, ImmutableArray<string> AttributeStrings, string DefaultValue)
     {
         public string ToArgumentString()
         {
-            return $"{DataType} {Name}";
+            string parameterString;
+            if (AttributeStrings.Any())
+            {
+                var attributeStringBlocks = AttributeStrings.Select(x => $"[{x}]");
+
+                var attributes = string.Join("", attributeStringBlocks);
+                parameterString = $"{attributes} {Name}";
+            }
+            else
+            { 
+                parameterString = Name;
+            }
+
+            if (!string.IsNullOrWhiteSpace(DefaultValue))
+            { 
+                parameterString += $" = {DefaultValue}";
+            }
+
+            return parameterString;
         }
     }
 

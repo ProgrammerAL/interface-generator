@@ -10,6 +10,7 @@ using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator;
 using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
 
 namespace UnitTests;
+
 public static class TestHelper
 {
     public static async Task VerifyAsync(string source, string directory)
@@ -17,10 +18,6 @@ public static class TestHelper
         SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
         // Create references for assemblies we require
         // We could add multiple references if required
-        //IEnumerable<PortableExecutableReference> references = new[]
-        //{
-        //    MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
-        //};
         var references = AppDomain.CurrentDomain.GetAssemblies()
             .Where(_ => !_.IsDynamic && !string.IsNullOrWhiteSpace(_.Location))
             .Select(_ => MetadataReference.CreateFromFile(_.Location))
@@ -37,12 +34,8 @@ public static class TestHelper
             references: references,
             new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
-        //GeneratorDriver driver = CSharpGeneratorDriver.Create(new PublicInterfaceSourceGenerator());
-        //driver = driver.RunGenerators(compilation);
         var driver = CSharpGeneratorDriver
                 .Create(new PublicInterfaceSourceGenerator())
-                //.AddAdditionalTexts(LoadEmbeddedResourcesAsAdditionalText())
-                //.RunGeneratorsAndUpdateCompilation(compilation, out var outputCompilation, out var diagnostics);
                 .RunGenerators(compilation);
 
         _ = await Verifier

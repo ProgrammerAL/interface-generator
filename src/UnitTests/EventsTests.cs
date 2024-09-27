@@ -14,7 +14,7 @@ public class EventsTests
             namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.SampleClasses;
 
             [GenerateInterfaceAttribute]
-            public class MyClass : IMyClass
+            public class SimpleEvents_AssertResults : IMyClass
             {
                 public event EventHandler? MyEvent;
 
@@ -36,7 +36,7 @@ public class EventsTests
             namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.SampleClasses;
 
             [GenerateInterfaceAttribute]
-            public class MyClass : IMyClass
+            public class ActionEvents_AssertResults : IMyClass
             {
                 public event Action<int>? MyEvent1;
                 public event Action<int, string, double, float, NonDemoClass1>? MyEvent2;
@@ -62,7 +62,7 @@ public class EventsTests
             public delegate void MyEventDelegate(object sender, EventArgs e);
             
             [GenerateInterfaceAttribute]
-            public class MyClass : IMyClass
+            public class CustomEvents_AssertResults : IMyClass
             {
                 public event MyEventDelegate MyEvent;
             
@@ -84,7 +84,7 @@ public class EventsTests
             namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.SampleClasses;
 
             [GenerateInterfaceAttribute]
-            public class MyClass : IMyClass
+            public class WithExcludedEvents_AssertResults : IMyClass
             {
                 public event EventHandler? MyEvent;
                 
@@ -114,7 +114,7 @@ public class EventsTests
             namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.SampleClasses;
 
             [GenerateInterfaceAttribute]
-            public class MyClass : IMyClass
+            public class EventWithComments_AssertCommentsAppearInGeneratedInterfaceEvents : IMyClass
             {
                 /// <summary>
                 /// Some comments for my event
@@ -151,14 +151,40 @@ public class EventsTests
             }
 
             [GenerateInterfaceAttribute]
-            public class MyClass : IMyClass, IMyInterface
+            public class ImplementsInterfaceEvent_AssertEventNotInGeneratedInterface : IMyClass, IMyInterface
             {
+                //This event should be ignored because it's in the other interface
                 public event EventHandler? MyInterfaceEvent;
                 public event EventHandler? MyEvent;
 
                 public void HandEvents()
                 {
                     MyEvent?.Invoke(this, EventArgs.Empty);
+                }
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task SelfReferentialSenderEvent_AssertOutput()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.SampleClasses;
+
+            [GenerateInterfaceAttribute]
+            public class SelfReferentialSenderEvent_AssertOutput : IMyClass
+            {
+                public event Action<ISelfReferentialSenderEvent_AssertOutput>? MyEvent;
+                public event Action<ISelfReferentialSenderEvent_AssertOutput, string>? MyEvent2;
+                public event Action<ISelfReferentialSenderEvent_AssertOutput, string?, int?>? MyEvent3;
+
+                public void HandEvents()
+                {
+                    MyEvent?.Invoke(this, EventArgs.Empty);
+                    MyEvent2?.Invoke(this, EventArgs.Empty);
                 }
             }
             """;

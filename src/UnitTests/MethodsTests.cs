@@ -1,5 +1,7 @@
 #pragma warning disable IDE0058 // Expression value is never used
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace UnitTests;
 
 public class MethodsTests
@@ -164,7 +166,7 @@ public class MethodsTests
                 public void GenerateString1(int arg1, string arg2, string? arg3, float arg4, double arg5, int? arg6)
                     => Console.WriteLine($"{arg1} {arg2} {arg3} {arg4} {arg5} {arg6}");
 
-                public void Dispose(){}            
+                public void Dispose() { }            
             }
             """;
 
@@ -184,7 +186,48 @@ public class MethodsTests
                 public void GenerateString1(int arg1, string arg2, string? arg3, float arg4, double arg5, int? arg6)
                     => Console.WriteLine($"{arg1} {arg2} {arg3} {arg4} {arg5} {arg6}");
 
-                public void Dispose(){}
+                public void Dispose() { }
+                public string Dispose(){ return ""; }
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task ImplementsIAsyncDisposable_AssertMethodNotInGeneratedInterface()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass, System.IAsyncDisposable
+            {
+                public void GenerateString1(int arg1, string arg2, string? arg3, float arg4, double arg5, int? arg6)
+                    => Console.WriteLine($"{arg1} {arg2} {arg3} {arg4} {arg5} {arg6}");
+
+                public async ValueTask DisposeAsync() { await Task.CompletedTask; }            
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task IsIAsyncDisposiblePropertyTrue_AssertDisposeMethodNotInGeneratedInterface()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute(IAsyncDisposable = true)]
+            public class MyClass : IMyClass
+            {
+                public void GenerateString1(int arg1, string arg2, string? arg3, float arg4, double arg5, int? arg6)
+                    => Console.WriteLine($"{arg1} {arg2} {arg3} {arg4} {arg5} {arg6}");
+
+                public async ValueTask DisposeAsync() { await Task.CompletedTask; }            
                 public string Dispose(){ return ""; }
             }
             """;
@@ -304,6 +347,135 @@ public class MethodsTests
                 public U? GenerateString8<T, U, V>(T arg1, U? arg2, V arg3)
                     where U : MyBaseClass?
                     => arg2;
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task MethodWithRefAndOutArgs_AssertOutput()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass
+            {
+                public void GenerateString1(ref int arg1, out string arg2, ref int? arg3, out int? arg4)
+                {
+                }
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task MethodWithMemberNotNullAttributeValue_AssertAtrributeInGeneratedCode()
+    {
+        var source = """
+            using System.Diagnostics.CodeAnalysis;
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [AttributeUsageAttribute(AttributeTargets.Parameter)]
+            public class SomethingElseAttribute : System.Attribute
+            {
+            }
+            
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass
+            {
+                public bool TrySomething(int num, [NotNullWhen(true)][SomethingElse] out string? text)
+                {
+                    text = "abc123";
+                    return true;
+                }
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    public interface ISomething
+    {
+        void MyMethod(params int[] myArg);
+    }
+
+    [Fact]
+    public async Task MethodWithParamsArgs_AssertOutput()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass
+            {
+                public void MyMethod(params int[] myArg)
+                {
+                    Console.WriteLine(myArg);
+                }
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task MethodWithNullableParamsArgs_AssertOutput()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass
+            {
+                public void MyMethod(params int?[] myArg)
+                {
+                    Console.WriteLine(myArg);
+                }
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task MethodWithDefaultParamsArgs_AssertOutput()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass
+            {
+                public void MyMethod(int arg1 = 1, int arg2 = default, int? arg3 = null, int arg4 = 4, string valuedString = "abc123", string? nullString = null, string defaultString = default, string defaultNullableString = default)
+                {
+                    Console.WriteLine(arg1);
+                }
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task AsyncMethodTrturnsNullableType_AssertHasNullableAnnotation()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass
+            {
+                public async Task<string?> MyMethod(int arg1)
+                    => Task.FromResult($"{arg1}");
             }
             """;
 

@@ -33,14 +33,10 @@
 
     <ProjectReference Include="..\PublicInterfaceGenerator\PublicInterfaceGenerator.csproj" />
     <ProjectReference Include="..\PublicInterfaceGenerator.Attributes\PublicInterfaceGenerator.Attributes.csproj" />
-
-
-<!--    <ProjectReference Include="..\PublicInterfaceGenerator\PublicInterfaceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
-    <ProjectReference Include="..\PublicInterfaceGenerator.Attributes\PublicInterfaceGenerator.Attributes.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />-->
-
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Snapshots\Events\" />
     <Using Include="Xunit" />
     <Folder Include="Snapshots/" />
   </ItemGroup>

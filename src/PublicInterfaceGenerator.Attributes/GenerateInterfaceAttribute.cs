@@ -25,11 +25,25 @@ public class GenerateInterfaceAttribute : Attribute
     public string? Interfaces { get; set; }
 
     /// <summary>
-    /// Set this to specify the generates interface inherits from System.IDisposable.
-    /// This will be appended to the list of interfaces.
-    /// If you are also specifying interfaces with the ""{AttributeProperty_Interfaces}"" property, either set this to false and include ""System.IDisposable"" in the ""{AttributeProperty_Interfaces}"" property string, or set this to true and don't include ""System.IDisposable"" in the ""{AttributeProperty_Interfaces}"" property string.
+    /// Set this to specify the generated interface inherits from System.IDisposable.
+    /// This will be appended to the list of interfaces the generated interface inherits from.
+    /// This is in addition to the <see cref="Interfaces"/> property.
+    /// If you are also specifying interfaces with the <see cref="Interfaces"/> property, 
+    ///   either set this to false and include "System.IDisposable" in the <see cref="Interfaces"/> property string, 
+    ///   or set this to true and don't include "System.IDisposable" in the <see cref="Interfaces"/> string.
+    ///   Failure to do this will result in System.IDisposable being appended to the generated interface twice.
     /// </summary>
     public bool IsIDisposable { get; set; }
+
+    /// <summary>
+    /// Set this to specify the generated interface inherits from <see cref="System.IAsyncDisposable"/>.
+    /// This is in addition to the <see cref="Interfaces"/> property.
+    /// If you are also specifying interfaces with the <see cref="Interfaces"/> property, 
+    ///   either set this to false and include "System.IAsyncDisposable" in the <see cref="Interfaces"/> property string, 
+    ///   or set this to true and don't include "System.IAsyncDisposable" in the <see cref="Interfaces"/> string.
+    ///   Failure to do this will result in System.IAsyncDisposable being appended to the generated interface twice.
+    /// </summary>
+    public bool IsIAsyncDisposable { get; set; }
 
     public static class Constants
     {
@@ -43,5 +57,6 @@ public class GenerateInterfaceAttribute : Attribute
         public const string AttributeProperty_NamespaceName = nameof(Namespace);
         public const string AttributeProperty_Interfaces = nameof(Interfaces);
         public const string AttributeProperty_IsIDisposable = nameof(IsIDisposable);
+        public const string AttributeProperty_IsIAsyncDisposable = nameof(IsIAsyncDisposable);
     }
 }

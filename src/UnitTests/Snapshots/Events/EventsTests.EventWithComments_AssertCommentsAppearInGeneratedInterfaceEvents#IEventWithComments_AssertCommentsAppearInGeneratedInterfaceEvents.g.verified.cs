@@ -1,8 +1,8 @@
-﻿//HintName: IMyClass.g.cs
+﻿//HintName: IEventWithComments_AssertCommentsAppearInGeneratedInterfaceEvents.g.cs
 #nullable enable
 namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.SampleClasses;
 
-public interface IMyClass
+public interface IEventWithComments_AssertCommentsAppearInGeneratedInterfaceEvents
 {
     /// <summary>
     /// Some comments for my event

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text;
-using System.Xml.Linq;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
 
 using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
 
@@ -16,9 +13,10 @@ public static class MethodParser
     public static InterfaceToGenerateInfo.Method? ExtractMethod(
         IMethodSymbol symbol,
         string extraClassInterfaces,
-        bool inheritsFromIDisposable)
+        bool inheritsFromIDisposable,
+        bool inheritsFromIAsyncDisposable)
     {
-        if (!IsSymbolValid(symbol, extraClassInterfaces, inheritsFromIDisposable))
+        if (!IsSymbolValid(symbol, extraClassInterfaces, inheritsFromIDisposable, inheritsFromIAsyncDisposable))
         {
             return null;
         }
@@ -40,20 +38,41 @@ public static class MethodParser
 
         var argumentBuilder = ImmutableArray.CreateBuilder<InterfaceToGenerateInfo.MethodArgument>();
 
-        foreach (var methodParameter in symbol.Parameters)
+        foreach (var parameter in symbol.Parameters)
         {
-            var argName = methodParameter.Name;
-            var dataType = methodParameter.Type.ToDisplayString();
-            var nullableAnnotation = methodParameter.NullableAnnotation;
-            var interfaceArgument = new InterfaceToGenerateInfo.MethodArgument(argName, dataType, nullableAnnotation);
+            var argName = parameter.ToDisplayString();
+            var nullableAnnotation = parameter.NullableAnnotation;
+            var attributeStrings = parameter.GetAttributes().Select(x => x.ToString()).ToImmutableArray();
+            string defaultValue = "";
+
+            if (parameter.HasExplicitDefaultValue)
+            {
+                if (parameter.ExplicitDefaultValue is null)
+                {
+                    defaultValue = "null";
+                }
+                else if (parameter.ExplicitDefaultValue is string stringValue)
+                {
+                    defaultValue = $"\"{stringValue}\"";
+                }
+                else
+                {
+                    defaultValue = parameter.ExplicitDefaultValue.ToString();
+                }
+            }
+
+            var interfaceArgument = new InterfaceToGenerateInfo.MethodArgument(argName, nullableAnnotation, attributeStrings, defaultValue);
             argumentBuilder.Add(interfaceArgument);
         }
 
         return new InterfaceToGenerateInfo.Method(methodName, returnType, argumentBuilder.ToImmutableArray(), genericParameters, methodComments);
     }
 
-
-    private static bool IsSymbolValid(IMethodSymbol symbol, string extraClassInterfaces, bool inheritsFromIDisposable)
+    private static bool IsSymbolValid(
+        IMethodSymbol symbol,
+        string extraClassInterfaces,
+        bool inheritsFromIDisposable,
+        bool inheritsFromIAsyncDisposable)
     {
         if (string.Equals(".ctor", symbol.Name, StringComparison.Ordinal))
         {
@@ -102,6 +121,13 @@ public static class MethodParser
             //  Note: This is different from the method check above, because the concrete class won't have IDisposable in the definition list, it's on the interface
             return false;
         }
+        else if (IsIAsyncDisposeMethodAndImplementsIAsyncDisposable(symbol, extraClassInterfaces, inheritsFromIAsyncDisposable))
+        {
+            //If the code uses an attribute to set that the class implements IAsyncDisposable
+            //  and this is the DisposeAsync() method, don't include it in the interface
+            //  Note: This is different from the method check above, because the concrete class won't have IAsyncDisposable in the definition list, it's on the interface
+            return false;
+        }
 
         return true;
     }
@@ -119,6 +145,34 @@ public static class MethodParser
         }
 
         if (inheritsFromIDisposable)
+        {
+            return true;
+        }
+
+        var interfaces = extraClassInterfaces.
+                            Split([','], StringSplitOptions.RemoveEmptyEntries)
+                            .Select(x => x.Trim());
+        if (interfaces.Any(x => string.Equals(x, "System.IDisposable") || string.Equals(x, "IDisposable")))
+        {
+            return true;
+        }
+
+        return true;
+    }
+
+    private static bool IsIAsyncDisposeMethodAndImplementsIAsyncDisposable(IMethodSymbol symbol, string extraClassInterfaces, bool inheritsFromIAsyncDisposable)
+    {
+        if (!symbol.Name.Equals("DisposeAsync"))
+        {
+            return false;
+        }
+
+        if (symbol.ReturnType.Name != "ValueTask")
+        {
+            return false;
+        }
+
+        if (inheritsFromIAsyncDisposable)
         {
             return true;
         }

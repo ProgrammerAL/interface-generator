@@ -56,9 +56,35 @@ public static class SourceGenerationHelper
 
     private static bool ShouldEnableNullableReferences(in InterfaceToGenerateInfo interfaceInfo)
     {
-        return interfaceInfo.Methods.Any(m => m.Arguments.Any(a => a.NullableAnnotation == NullableAnnotation.Annotated)
-                                              || m.ReturnType.EndsWith("?"))
-            || interfaceInfo.Properties.Any(x => x.ReturnType.EndsWith("?"))
-            || interfaceInfo.Events.Any(x => x.EventDataType.EndsWith("?"));
+        foreach (var method in interfaceInfo.Methods)
+        {
+            //If the method returns a nullable value
+            //  or a non-nullable value but it's a generic type and the generic value can be null
+            //  Ex: Task<string?>
+            if (method.ReturnType.Contains("?"))
+            {
+                return true;
+            }
+
+            foreach (var arg in method.Arguments)
+            {
+                if (arg.NullableAnnotation == NullableAnnotation.Annotated)
+                {
+                    return true;
+                }
+            }
+        }
+
+        if (interfaceInfo.Properties.Any(x => x.ReturnType.EndsWith("?")))
+        {
+            return true;
+        }
+
+        if (interfaceInfo.Events.Any(x => x.EventDataType.EndsWith("?")))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

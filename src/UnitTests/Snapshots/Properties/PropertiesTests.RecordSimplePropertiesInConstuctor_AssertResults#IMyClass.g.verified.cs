@@ -12,5 +12,5 @@ public interface IMyClass
     bool Equals(object? obj);
     bool Equals(IMyClass? other);
     ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses.MyClass <Clone>$();
-    void Deconstruct(string FirstName, string? MiddleName, string LastName);
+    void Deconstruct(out string FirstName, out string? MiddleName, out string LastName);
 }

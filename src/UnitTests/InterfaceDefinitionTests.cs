@@ -23,6 +23,25 @@ public class InterfaceDefinitionTests
     }
 
     [Fact]
+    public async Task DefaultGenerationWithComments_AssertCommentsInOutput()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            /// <summary>
+            /// This is my class block comment
+            /// </summary>
+            [GenerateInterfaceAttribute]
+            public class MyClass : IMyClass
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
     public async Task DefaultName_SimpleAttributeName()
     {
         var source = """
@@ -103,6 +122,22 @@ public class InterfaceDefinitionTests
     }
 
     [Fact]
+    public async Task CustomInterfacesAndIAsyncDisposable()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute(IsIAsyncDisposable = true, Interfaces = "MyCode.Interface1, MyCode.Interface2, MyCode.Interface3")]
+            public class MyClass : IMyClass
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
     public async Task IsIDisposable()
     {
         var source = """
@@ -110,6 +145,38 @@ public class InterfaceDefinitionTests
             namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
 
             [GenerateInterfaceAttribute(IsIDisposable = true)]
+            public class MyClass : IMyClass
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task IsIAsyncDisposable()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute(IsIAsyncDisposable = true)]
+            public class MyClass : IMyClass
+            {
+            }
+            """;
+
+        await TestHelper.VerifyAsync(source, SnapshotsDirectory);
+    }
+
+    [Fact]
+    public async Task IsIDisposableAndIAsyncDisposable()
+    {
+        var source = """
+            using ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.Attributes;
+            namespace ProgrammerAl.SourceGenerators.PublicInterfaceGenerator.UnitTestClasses;
+
+            [GenerateInterfaceAttribute(IsIDisposable = true, IsIAsyncDisposable = true)]
             public class MyClass : IMyClass
             {
             }
