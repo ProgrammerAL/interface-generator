@@ -3,8 +3,10 @@
 	<PropertyGroup>
 		<!-- Source generators must target netstandard 2.0 -->
 		<TargetFramework>netstandard2.0</TargetFramework>
+
 		<!-- Do not include the generator as a lib dependency -->
 		<IncludeBuildOutput>false</IncludeBuildOutput>
+
 		<LangVersion>Latest</LangVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>

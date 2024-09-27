@@ -20,7 +20,6 @@ public class PublicInterfaceSourceGenerator : IIncrementalGenerator
             .ForAttributeWithMetadataName(
                 GenerateInterfaceAttribute.Constants.GenerateInterfaceAttributeFullName,
                 predicate: static (node, _) => node is ClassDeclarationSyntax or RecordDeclarationSyntax,
-                //predicate: static (node, _) => true,
                 transform: ClassParser.GetTypeToGenerate);
 
         // Generate source code for each interface

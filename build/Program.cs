@@ -72,7 +72,7 @@ public sealed class BuildTask : FrostingTask<BuildContext>
         context.CleanDirectory(context.ProjectPaths.OutDir);
 
         BuildDotnetApp(context, context.ProjectPaths.PathToSln);
-        //TestDotnetApp(context, context.ProjectPaths.UnitTestProj);
+        TestDotnetApp(context, context.ProjectPaths.UnitTestProj);
         PackNugetPackage(context, context.ProjectPaths.OutDir, context.ProjectPaths.CsprojFile);
     }
 
