@@ -20,6 +20,14 @@
 
 	<PropertyGroup>
 		<Version>0.1.0</Version>
+		<Title>Public Interface Generator</Title>
+		<Authors>ProgrammerAL</Authors>
+		<Description>A source generator to create C# interfaces based off the public methods/properties/events of a class.</Description>
+		<PackageProjectUrl>https://github.com/ProgrammerAL/public-interface-generator</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/ProgrammerAL/public-interface-generator</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>source generator</PackageTags>
+
 		<!--Mark the nuget as a dev dependency, so any projects using this nuget don't auto pull in this project-->
 		<DevelopmentDependency>true</DevelopmentDependency>
 	</PropertyGroup>
